@@ -7,3 +7,4 @@ else:
     resposta="Não"
 print(f"O {numero1} é maior que o número {numero2}? {numero1 > numero2}\n------\ncom if else:\n")
 print(f"O {numero1} é maior que o número {numero2}? {resposta}")
+#
