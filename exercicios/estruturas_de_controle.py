@@ -6,7 +6,7 @@
 linha= "-" *30
 #-------------------
 print("-"*30)
-print("digitae dois números para fazermos algumas comparações entre os dois")
+print("digita dois números para fazermos algumas comparações entre os dois")
 numero1=input("digite o primeiro número: ")
 numero2=input("Digite o segundo número: ")
 #comparando o número 1 com o número 2
@@ -36,22 +36,22 @@ if diferente==True:
 # utilizando os operadores >, <, ==, e !=. Exiba o resultado de cada comparação de maneira 
 # clara.
 print=("\n")
-print("Digite duas palavras para fazermos algumas comparações entre elas")
+#print("Digite duas palavras para fazermos algumas comparações entre elas")
 palavra1=input("Digite a primeira palavra: ") 
 palavra2=input("Digite a segunda palavra: ") 
-maior= palavra1 > palavra2
-menor= palavra1 < palavra2
-igual = palavra1 == palavra2
-diferente = palavra1 != palavra2
-print(f"COMPARAÇÕES ENTRE PALAVRAS\n{linha}")
+maior= len(palavra1) > len(palavra2)
+menor= len(palavra1) < len(palavra2)
+igual = len(palavra1) == len(palavra2)
+diferente = len(palavra1) !=len(palavra2)
+print(f"COMPARAÇÕES ENTRE PALAVRAS\n--------")
 if maior==True:
-    print(f"o número {palavra1} é maior que o número {palavra2}\n{linha}")
+    print(f"a palavra {palavra1} é maior que a palavra {palavra2}\n{linha}")
 if menor==True:
-    print(f"o número {palavra1} é menor que o número {palavra2}\n{linha}")
+    print(f"a palavra {palavra1} é menor que a palavra {palavra2}\n{linha}")
 if igual==True:
-    print(f"o número {palavra1} é igual ao número {palavra2}\n{linha}")
+    print(f"a palavra {palavra1} é igual à palavra {palavra2}\n{linha}")
 if diferente==True:
-    print(f"o número {palavra1} é diferente do número {palavra2}\n{linha}")
+    print(f"a palavra {palavra1} é diferente da palavra {palavra2}\n{linha}")
 # Exercício 3  
 # Crie um programa que peça ao usuário para digitar um número e uma palavra (string). 
 # Compare o número com a string utilizando os operadores == e !=. Converta o número para 
@@ -59,12 +59,24 @@ if diferente==True:
 print=("\n")
 print("Digite um número e uma palavra para fazermos algumas comparações entre os dois")
 palavra1=input("Digite a primeira palavra: ") 
-numero1=input("Digite um número: ") 
+numero1=input("Digite um número: ")
+if palavra1 == str(numero1):
+    print(f"são iguais") 
+else:
+    print(f"são diferentes")
  
 # Exercício 4  
 # Crie um programa que peça ao usuário para digitar duas palavras. O programa deve 
 # comparar o comprimento das duas palavras e dizer qual delas tem mais caracteres ou se 
 # elas têm o mesmo número de caracteres. 
+palavra1=input("Digite a primeira palavra: ") 
+palavra2=input("Digite a segunda palavra: ") 
+if len(palavra1) > len(palavra2):
+    print(f"{palavra1} é maior que {palavra2}")
+elif len(palavra1) == len(palavra2):
+    print(f"as palavras {palavra1} e {palavra2} tem o mesmo tamanho")
+else:
+    print(f"{palavra1} é menor que {palavra2}")
 # Exercício 5  
 # Crie um programa que peça ao usuário para digitar duas palavras (strings) e compare-as 
 # em ordem alfabética. Exiba qual palavra vem primeiro na ordem alfabética. 
