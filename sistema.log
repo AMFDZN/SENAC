@@ -1,0 +1,19 @@
+08/07/2026 20:08:55 - INFO - Programa iniciado.
+08/07/2026 20:09:16 - INFO - Programa iniciado.
+08/07/2026 20:09:58 - INFO - Valores informados: numerador=23.0, denominador=343.0
+08/07/2026 20:09:58 - INFO - Divisão realizada com sucesso. Resultado=0.06705539358600583
+08/07/2026 20:09:58 - INFO - Execução da opção Logging finalizada.
+08/07/2026 20:10:53 - INFO - Valores informados: numerador=11.0, denominador=0.0
+08/07/2026 20:10:53 - ERROR - Tentativa de divisão por zero.
+08/07/2026 20:10:53 - INFO - Execução da opção Logging finalizada.
+08/07/2026 20:11:59 - INFO - Valores informados: numerador=0.0, denominador=0.0
+08/07/2026 20:11:59 - ERROR - Tentativa de divisão por zero.
+08/07/2026 20:11:59 - INFO - Execução da opção Logging finalizada.
+08/07/2026 20:12:13 - WARNING - Usuário informou um valor inválido.
+08/07/2026 20:12:13 - INFO - Execução da opção Logging finalizada.
+08/07/2026 20:12:19 - INFO - Valores informados: numerador=11.0, denominador=0.0
+08/07/2026 20:12:19 - ERROR - Tentativa de divisão por zero.
+08/07/2026 20:12:19 - INFO - Execução da opção Logging finalizada.
+08/07/2026 20:15:09 - WARNING - Usuário informou um valor inválido.
+08/07/2026 20:15:09 - INFO - Execução da opção Logging finalizada.
+08/07/2026 20:15:12 - INFO - Execução da opção Logging finalizada.

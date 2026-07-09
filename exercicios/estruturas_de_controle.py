@@ -35,15 +35,15 @@ if diferente==True:
 # Crie um programa que peça ao usuário para digitar duas palavras (strings) e compare-as 
 # utilizando os operadores >, <, ==, e !=. Exiba o resultado de cada comparação de maneira 
 # clara.
-print=("\n")
-#print("Digite duas palavras para fazermos algumas comparações entre elas")
+print("\n")
+print("Digite duas palavras para fazermos algumas comparações entre elas")
 palavra1=input("Digite a primeira palavra: ") 
 palavra2=input("Digite a segunda palavra: ") 
 maior= len(palavra1) > len(palavra2)
 menor= len(palavra1) < len(palavra2)
 igual = len(palavra1) == len(palavra2)
 diferente = len(palavra1) !=len(palavra2)
-print(f"COMPARAÇÕES ENTRE PALAVRAS\n--------")
+print("COMPARAÇÕES ENTRE PALAVRAS\n--------")
 if maior==True:
     print(f"a palavra {palavra1} é maior que a palavra {palavra2}\n{linha}")
 if menor==True:
@@ -56,7 +56,7 @@ if diferente==True:
 # Crie um programa que peça ao usuário para digitar um número e uma palavra (string). 
 # Compare o número com a string utilizando os operadores == e !=. Converta o número para 
 # uma string antes da comparação.
-print=("\n")
+print("\n")
 print("Digite um número e uma palavra para fazermos algumas comparações entre os dois")
 palavra1=input("Digite a primeira palavra: ") 
 numero1=input("Digite um número: ")
