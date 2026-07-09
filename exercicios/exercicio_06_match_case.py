@@ -4,12 +4,12 @@
 # executará um dos exercícios abaixo. Todos os exercícios devem estar organizados 
 # dentro de um único menu.
 linha = ("--" * 20)
-print("Menu de Opções if,elif e else")
+print("Menu de Opções match / case")
 print("1 - Verificar se  se qualifica para uma vaga de emprego")
 print("2 - Digitar 3 números inteiros")
-print("3 - Verificar se número é par ou ímpar")
-print("4 - verificar se uma pessoa pode dirigir")
-print("5 - verificar se pode entrar na festa")
+print("3 - Verificar se o aluno está aprovado, reprovado ou em recuperação")
+print("4 - digitar duas palavras e uma opção de E ou OU")
+print("5 - valor de uma compra, tipo de pagamento e desconto")
 print("6 - Sair")
 
 opcao = input("Escolha sua opção: ").strip()
@@ -42,9 +42,9 @@ match opcao:
 # Informe qual é o maior número e se ele é positivo ou se ele é múltiplo de 5, mas 
 # não múltiplo de 3.
         print("digitar três números inteiros")
-        numero1=int(input("digite o primeiro número"))
-        numero2=int(input("digite o segundo número"))
-        numero3=int(input("digite o terceiro número"))
+        numero1=int(input("digite o primeiro número: "))
+        numero2=int(input("digite o segundo número: "))
+        numero3=int(input("digite o terceiro número: "))
         qualNumeroMaior = max(numero1, numero2, numero3)
         print(f"O número maior entre os números {numero1}, {numero2} e {numero3}, é o número: ({qualNumeroMaior})")
 
@@ -63,7 +63,6 @@ match opcao:
 
 # Em recuperação se a nota for maior ou igual a 5, mas menor que 7, ou se a 
 # quantidade de faltas for maior que 3, mas menor ou igual a 5.
-
 # Reprovado se a nota for menor que 5 e as faltas forem maiores que 5.
         notaDaProva = float(input("Qual a sua nota na prova? "))
         numeroDeFaltas= int(input("Quantas faltas você teve? "))
@@ -71,9 +70,8 @@ match opcao:
              print("Você está Aprovado")
         elif (notaDaProva >= 5 and notaDaProva < 7) or (numeroDeFaltas>3 and numeroDeFaltas<=5) :
             print("Você está em recuperação")
-        elif notaDaProva<5 and numeroDeFaltas>5
-            print("Você está reprovado")
-        elif 
+        elif notaDaProva<5 and numeroDeFaltas>5:
+            print("Você está reprovado")            
         print(linha)
     case "4":
 # Exercício 4
@@ -82,9 +80,26 @@ match opcao:
 # são iguais.
 # Se a opção for OU, verifique se pelo menos uma das palavras tem mais de 5 
 # caracteres ou se são iguais.
+        print("Digite duas palavras para fazermos comparações")
+        palavra1=input("Digite a primeira palavra: ")
+        palavra2=input("Digite a segunda palavra: ")
+        fatorComparador=input("Digite um dos dois fatores de comparação: E / OU ")
+        if fatorComparador=="e":
+            if len(palavra1)> 5 and len(palavra2)>5 and palavra1!=palavra2:
+                print("são maiores que 5, e não são iguais")
+        if fatorComparador=="ou":
+            if len(palavra1)> 5 or len(palavra2)>5 or palavra1==palavra2:
+                print("alguma das palavras tem mais de 5 letras, e podem são iguais")
 
         print(linha)
     case "5":
+# Exercício 5
+# Peça para o usuário digitar o valor de uma compra e o tipo de pagamento à vista ou 
+# parcelado.
+# Se a compra for superior a R$500,00 e o pagamento for parcelado, aplique um 
+# desconto de 10%.
+# Caso contrário, aplique um desconto de 5% se o pagamento for à vista.
+# Informe o valor final após o desconto.
         print(linha)
 
 
@@ -94,16 +109,3 @@ match opcao:
 
 
 
-# Exercício 4
-# Peça ao usuário para digitar duas palavras e uma opção de E ou OU.
-# Se a opção for E, verifique se ambas as palavras têm mais de 5 caracteres e não 
-# são iguais.
-# Se a opção for OU, verifique se pelo menos uma das palavras tem mais de 5 
-# caracteres ou se são iguais.
-# Exercício 5
-# Peça para o usuário digitar o valor de uma compra e o tipo de pagamento à vista ou 
-# parcelado.
-# Se a compra for superior a R$500,00 e o pagamento for parcelado, aplique um 
-# desconto de 10%.
-# Caso contrário, aplique um desconto de 5% se o pagamento for à vista.
-# Informe o valor final após o desconto.
