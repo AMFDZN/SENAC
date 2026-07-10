@@ -1,4 +1,4 @@
-print("--------------------\nVamos comparar dois números e verificar se são iguais ou diferentes um do outro")
+print("--------------------\nVamos comparar dois números e verificar se são iguais ou diferentes")
 numero1=int(input("Digite o primeiro número: "))
 numero2=int(input("Digite o segundo número: "))
 
