@@ -7,8 +7,17 @@
 # O programa deve utilizar match-case para o menu principal. Cada opção do menu
 # deve executar um exercício diferente. Deve existir uma opção para sair do
 # programa. Cada exercício deve funcionar de forma independente dentro do menu.
+#viva as funções python!
 def Linha():
-    print("-" *30)
+    print("╍" *30)
+    
+def Linhazinha():
+    print("╌" *30)
+
+#variáveis UI/UX para terminal 😎
+seta="🠆"
+linha =("╍"*30)
+linhazinha=("╌"*30)
     
 while True:
     print("Menu de opções. Selecione um dos exercícios")
@@ -21,7 +30,7 @@ while True:
     print("7- surpresa ")
 
     opcao = input("\nEscolha uma opção: ")
-    
+    Linha()
     match opcao:
         case "1":
 # Exercício 1
@@ -71,7 +80,7 @@ while True:
                     case _: # O underline representa "qualquer outra coisa" (padrão/default)
                         print("Opção inválida")
                 
-                print("-" * 20) # Linha separadora entre as tentativas
+                print("~" * 20) # Linha separadora entre as tentativas
                 contador += 1
                 
             Linha()

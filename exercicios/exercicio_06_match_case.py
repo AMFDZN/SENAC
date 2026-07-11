@@ -3,9 +3,20 @@
 # match-case. O usuário deverá escolher uma opção do menu e cada opção 
 # executará um dos exercícios abaixo. Todos os exercícios devem estar organizados 
 # dentro de um único menu.
+#viva as funções python!
+def Linha():
+    print("╍" *30)
+    
+def Linhazinha():
+    print("╌" *30)
+
+#variáveis UI/UX para terminal 😎
+seta="🠆"
+linha =("╍"*30)
+linhazinha=("╌"*30)
+
+
 while True:
-    linha = ("--" * 20)
-    linhazinha=(" ~ " * 10)
     print("Menu de Opções match / case")
     print("1 - Verificar se  se qualifica para uma vaga de emprego")
     print("2 - Digitar 3 números inteiros, e verificar qual é maior")

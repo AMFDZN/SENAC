@@ -8,10 +8,17 @@
 # O programa deve utilizar match-case para o menu principal. Cada opção do menu
 # deve executar um exercício diferente. Deve existir uma opção para sair do
 # programa. Cada exercício deve funcionar de forma independente dentro do menu.
+#viva as funções python!
 def Linha():
-    print("-" *30)
+    print("╍" *30)
+    
 def Linhazinha():
-    print("~+~" *12)
+    print("╌" *30)
+
+#variáveis UI/UX para terminal 😎
+seta="🠆"
+linha =("╍"*30)
+linhazinha=("╌"*30)
     
 while True:
     
@@ -146,17 +153,20 @@ while True:
             # Busca de elemento na lista
             nomeBusca = input("\nDigite um nome para buscar na lista: ").strip()
             if nomeBusca in listaNomes:
-                print(f"Resultado: '{nomeBusca}' ESTÁ presente na lista!")
+                print(f"Resultado:\n '{nomeBusca}' ESTÁ presente na lista!")
+                Linhazinha()
             else:
-                print(f"Resultado: '{nomeBusca}' NÃO foi encontrado.")
+                print(f"Resultado:\n '{nomeBusca}' NÃO foi encontrado.")
+                Linhazinha()
                 
             # Exibir ordenada (sem alterar a lista original permanentemente)
             listaOrdenada = sorted(listaNomes)
-            print(f"Lista em ordem alfabética: {listaOrdenada}")
+            print(f"Lista em ordem alfabética:\n {listaOrdenada}")
+            Linhazinha()
             
             # Inverter a ordem da lista
             listaNomes.reverse()
-            print(f"Lista invertida (de trás para frente): {listaNomes}")
+            print(f"Lista invertida (de trás para frente):\n {listaNomes}")
             Linha()
             input("\nPara voltar ao menu, pressione Enter.")
         
@@ -232,8 +242,8 @@ while True:
                 print("5 - Ordenar lista")
                 print("6 - Sair do \"Submenu\"")
                 
-                opcaoListas = input("Escolha uma opção interna: ").strip()
-                
+                opcaoListas = input("Escolha uma opção no menu de \"Listas\": ").strip()
+                Linha()
                 match opcaoListas:
                     case "1":
                         #pedi string pra facilitar minha vida - mesmo que seja digitado um número, passa
