@@ -19,6 +19,7 @@
 # O tratamento de exceções e o registro de eventos devem estar presentes em todos os exercícios do programa.
 
 import logging
+from functools import reduce #SACANAGEM! -  erro constante de "reduce é indefinido" - eu com o javascript na cabeça 
 
 logging.basicConfig(                    
     filename="exercico.log",
@@ -199,7 +200,7 @@ Escolha uma opção para testar:
             # Exercício 3
             # Crie dois dicionários representando estoques de duas lojas. Mostre os produtos
             # que as duas lojas vendem, os produtos exclusivos de cada loja e o estoque total.
-            logging.info("\n\rExercício 3:")
+            logging.info("\n➔ Exercício 3:")
             print("\nExercício 3:\n Manipular dicionários \"estoque de vprodutos de 2 lojas\"")
             # Dicionários
             produtosLoja1 = {
@@ -214,17 +215,17 @@ Escolha uma opção para testar:
                 "pincel atômico":40
             }
             
-            logging.info(f"Dicionários iniciais:\n produtos loja 1:\n{mostraDicionario(produtosLoja1)}\n Produtos loja 2:\n{mostraDicionario(produtosLoja2)}")
+            logging.info(f"Dicionários iniciais:\n produtos loja 1:\n{mostraDicionario(produtosLoja1)}\n Produtos loja 2:\n{mostraDicionario(produtosLoja2)}\n{linhazinha}")
             #mostra o nome dos produtos das duas lojas
             Linhazinha()
             print(f"Produtos da loja 1:\n > {mostraChave(produtosLoja1)}")
             print(f"Produtos da loja 2:\n > {mostraChave(produtosLoja2)}")
             #log
             logging.info(f"Produtos da loja 1:\n {mostraChave(produtosLoja1)}")
-            logging.info(f"Produtos da loja 2:\n {mostraChave(produtosLoja2)}")
+            logging.info(f"Produtos da loja 2:\n {mostraChave(produtosLoja2)}\n{linhazinha}")
             Linhazinha()
-            print(f"soma dos produtos das lojas:\n {mostraSomaChaves("Total das duas lojas", produtosLoja1, produtosLoja2)}")
-            logging.info(f"soma dos produtos das lojas:\n {mostraSomaChaves("Total das duas lojas", produtosLoja1, produtosLoja2)}")
+            print(f"soma dos produtos das lojas:\n {mostraSomaChaves('Total das duas lojas', produtosLoja1, produtosLoja2)}")
+            logging.info(f"soma dos produtos das lojas:\n {mostraSomaChaves('Total das duas lojas', produtosLoja1, produtosLoja2)}\n{linha}")
 
             Linha()
             logging.info("Ex. 3 finalizado\n")
@@ -234,21 +235,134 @@ Escolha uma opção para testar:
             # Crie uma função multiplicar (valor1, valor2) que recebe dois números e retorna o
             # produto. Pergunte ao usuário dois números e mostre o resultado usando a função
             # multiplicar.
+            logging.info("Ex. 4 iniciado\n")
+            logging.info("""criada a função:
+                         
+            def multiplicar(valor1, valor2):
+                return valor1*valor2 
+                        """)
+            def multiplicar(valor1, valor2):
+                return valor1*valor2
             
+            valor1=int(input("Vamos multiplixar 2 números\nInforme o primeiro número: "))
+            valor2=int(input("informe o segundo número: "))
+            logging.info(f"Usuário informou os valores:\n{valor1} e {valor2}\n")
+            Linhazinha()
+            input(f"o resultado da multiplicação de {valor1}X{valor2} é: {multiplicar(valor1, valor2)}")
+            logging.info(f"o resultado da multiplicação de {valor1}X{valor2} é: {multiplicar(valor1, valor2)}")
+            logging.info(f"Exercício 4 finalizado\n{linha}")
             Linha()
         case "5 ":
             # Exercício 5
             # Crie uma função soma_numeros que receba qualquer quantidade de números e
             # retorne a soma.
+            logging.info("Exercício 5 iniciado\n")
+            def soma_numeros(*args):
+                if len(args) <= 1:
+                    return 0
+                return sum(args)
+
+            logging.info("""criada a função
+                         def soma_numeros(*args):
+                if len(args) <= 1:
+                    return 0
+                return sum(args)""")
+
+            entrada = input("Informe alguns números para serem somados:\n➜ Liste os números usando vírgula para separa-los:\n")
+            logging.info("Solcitada a entrada dos números, separados por vírgula")
+
+            # Verifica se o usuário digitou algo
+            if not entrada.strip():
+                print("PQP!\nInforme ao menos 1 número!\n\nSelecione a opção (5) novamente e recomeçe.")
+                logging.error(f"O usuário não digitou nenhum número. Abortado.\nPedido para recomeçar\n{linhazinha}")
+            else:
+                try:
+                    listaNumeros = [int(num.strip()) for num in entrada.split(',')]
+                    logging.info("for: limpa a variável de entrada, transformando em int, transforma em lista com split(,), e usa a função ")
+                    resultado = soma_numeros(*listaNumeros)
+                    
+                    print(f"A soma dos números é: {resultado}")
+                    logging.info(f"Soma calculada: {resultado}\n{linhazinha}")
+                    
+                except ValueError:
+                    print("Erro: Por favor, digite apenas números válidos separados por vírgula.")
+                    logging.error("except ValueError:\nO usuário digitou valores inválidos.\nAbortado.\n")
+
+                        #testes
+            #soma_numeros(2,3,4,5,6)
+            #soma_numeros(1 2 3 4 5)
+            logging.info(f"Exercício 5 finalizado\n{linha}")
             Linha()
         case "6":
             # Exercício 6
             # Crie uma lista de números com valores fornecidos pelo usuário, use map para
             # dobrar os valores da lista, use filter para selecionar apenas os números maiores
             # que 3 e use reduce para calcular o produto de todos os números.
+            print("\nExercício 6: Operações Avançadas com Map, Filter e Reduce\n➔ Vamos criar uma lista de números.")
+            logging.info("Exercício 6 iniciado.")
+
+            listaNumeros = [] #declara a variável como lista
+
+            while True:
+                try: #tenta obter número inteiro válido para fornecer o limite(quantidade de números) ao pŕoximo while
+                    quantidade = int(input("Quantos números deseja inserir na lista inicial?\n "))
+                    if quantidade <= 0:
+                        print("Erro: A quantidade deve ser maior que zero.\nTente outra vez!\n\nInforme um \"numeral inteiro\": Ex.: 1, 10, 100...\n")
+                        logging.critical("Erro crítico: Usuário tentou informar menor ou igual a zero!\n")
+                        continue
+                    break
+                except ValueError:
+                    print("Erro:\nPQP! Escolha um NÚMERO INTEIRO!\n Presisa da ajuda dos universitários?")
+                    logging.error("Entrada inválida para a quantidade de números.")
+
+            #Agora temos uma "quantidade" definida
+            logging.info(f"Iniciando com a inserção dos números, segundo a quantidade ({quantidade}) informada")
+            while len(listaNumeros) < quantidade:
+                try:
+                    #linha complicxada . pedi ajuda ao gemini.
+                    # {len(listaNumeros) + 1}, para transmitir ao usuário uma informação mais clara, pois estamos no ZERO
+                    valor = int(input(f"Digite o {len(listaNumeros) + 1}º número: ").replace(",", "."))
+                    listaNumeros.append(valor) #insere, ao final, o valor informado
+                    logging.info(f"Recebendo o número {valor}, e acrescentando à lista")
+                except ValueError:
+                    print("Erro: Digite apenas valores numéricos.")
+                    logging.error("(except): Valor numérico inválido enviado.\n")
+
+            print(f"\nLista Inicial: {listaNumeros}")
+            logging.info(f"Lista inicial criada:\n➔{listaNumeros}")
+
+            try:
+                # Complicado: mMap() com Lambda para fazer o cálculo do valor X valor
+                # vivas à documentação de aula e ao tio Gemini
+                listaDobrada = list(map(lambda x: x * 2, listaNumeros))
+                print(f"1. Lista com valores dobrados (Map): {listaDobrada}\n{linhazinha}")
+                logging.info(f"1. Lista com (valoresXvalores): {listaDobrada}\n{linhazinha}")
+
+                # filter()+lambda para testar se 'x > 3'
+                listaFiltrada = list(filter(lambda x: x > 3, listaDobrada))
+                print(f"2. Apenas valores maiores que 3 (Filter): {listaFiltrada}\n{linhazinha}")
+                #print(listaFiltrada) # - Erro muito chato! Gemini salvou. A lista vazia estava chegando até aqui!
+                if len(listaFiltrada) == 0:
+                    print("3. Produto (com reduce()):\n Não foi possível calcular porque nenhum número restou após o filtro.")
+                    logging.critical("Não foi possível executar o reduce: Lista vazia.")
+                else:
+                    # ESTA FOI UMA PEGADINHA, NÉ? Puro sadismo!
+                    # o método reduce() não é nativo e precisa "importar"
+                    logging.critical("SACANAGEM.\nPrecisa importar o método reduce() no Pyton!!!!\n")
+                    produtoFinal = reduce(lambda x, y: x * y, listaFiltrada)
+                    print(f"3. Produto de todos os números filtrados (com reduce): {produtoFinal}\n{linhazinha}")
+                    
+                    logging.info(f"Operações concluídas com sucesso.\nProduto final: {produtoFinal}\{linhazinha}")
+
+            except Exception as erroInesperado: #GEMINI
+                print(f"Ocorreu um erro durante o processamento: {erroInesperado}")
+                logging.exception("Erro indefinido durante a execução do Map/Filter/Reduce.")
+
+            input("\nPara voltar ao menu, pressione Enter.")
+            logging.info("Exercício 6 finalizado.")
             Linha()
         case "7":
-            logging.info("Programa encerrado pelo usuário.")
+            logging.warning("Programa encerrado pelo usuário.")
             print("Encerrando o programa...")
             break
 

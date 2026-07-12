@@ -8,6 +8,7 @@
 # O programa deve utilizar match-case para o menu principal. Cada opção do menu
 # deve executar um exercício diferente. Deve existir uma opção para sair do
 # programa. Cada exercício deve funcionar de forma independente dentro do menu.
+
 #viva as funções python!
 def Linha():
     print("╍" *30)
@@ -15,7 +16,7 @@ def Linha():
 def Linhazinha():
     print("╌" *30)
 
-#variáveis UI/UX para terminal 😎
+#variáveis UI/UX para terminal e log 😎
 seta="🠆"
 linha =("╍"*30)
 linhazinha=("╌"*30)
@@ -186,13 +187,13 @@ while True:
             
             while True:
                 try:
-                    quantidadeNumeros = int(input("Quantos números inteiros e positivos deseja inserir? "))
+                    quantidadeNumeros = int(input("Quantos números \"inteiros e positivos\" deseja inserir? "))
                     if quantidadeNumeros <= 0: #valida positivos
-                        print("Erro: A quantidade de elementos deve ser maior que zero.")
+                        print("Erro: A quantidade de elementos deve ser maior que zero!")
                         continue #retorna ao início e pede novamente um número inteiro
                     break
                 except ValueError:
-                    print("Erro: Digite um número inteiro válido para a quantidade.")
+                    print("Erro: Digite um NÚMERO INTEIRO POSITIVO para definir a quantidade de números a lista terá!")
             
             # Loop para receber os números válidos
             while len(listaNumeros) < quantidadeNumeros:
@@ -242,28 +243,32 @@ while True:
                 print("5 - Ordenar lista")
                 print("6 - Sair do \"Submenu\"")
                 
-                opcaoListas = input("Escolha uma opção no menu de \"Listas\": ").strip()
+                opcaoListas = input("Escolha uma opção no \"Menu de Listas\": ").strip()
                 Linha()
                 match opcaoListas:
                     case "1":
-                        #pedi string pra facilitar minha vida - mesmo que seja digitado um número, passa
+                        print("1- Adicionar um item a uma lista")                        
+                        #pedi como string pra facilitar minha vida - mesmo que seja digitado um número, passa
                         novoItem = input("Digite o item para adicionar: ").strip()
-                        if novoItem != "": #
+                        if novoItem != "": #se não esiver vazio, é adicionado á lista
                             listaItens.append(novoItem)
                             print(f"'{novoItem}' adicionado com sucesso.")
+                            print(f"{listaItens}\n{linhazinha}")
                         else:
-                            print("Erro: Não é possível adicionar itens vazios.")
+                            print(f"Erro: você não digitou nada.\n{linhazinha}")
                             
+                        Linha()    
                     case "2":
-                        if len(listaItens) == 0: #vai que?!
-                            print("A lista está vazia. Não há nada para remover.")
+                        print("2- Remover um item de uma lista, usando seu índice")
+                        if len(listaItens) == 0: 
+                            print(f"A lista está vazia. Não há nada para remover.\n{linhazinha}")
                             continue
                         try:
                             print("Itens atuais com seus índices:")
                             for indice, valor in enumerate(listaItens):
                                 print(f"Índice {indice}: {valor}")
                                 
-                            indiceRemover = int(input("Digite o número do índice que quer remover: "))
+                            indiceRemover = int(input("Digite o número do índice que queira remover: "))
                             itemRemovido = listaItens.pop(indiceRemover)
                             print(f"Sucesso: O item '{itemRemovido}' foi removido.")
                         except ValueError:
@@ -276,7 +281,7 @@ while True:
                         if itemVerificar in listaItens:
                             print(f"O item '{itemVerificar}' ESTÁ na lista na posição {listaItens.index(itemVerificar)}.")
                         else:
-                            print(f"O item '{itemVerificar}' NÃO está na lista.")
+                            print(f"O item '{itemVerificar}' NÃO ESTÁ na lista.")
                             
                     case "4":
                         if len(listaItens) == 0:
@@ -293,7 +298,7 @@ while True:
                             
                     case "6":
                         print("Saindo do submenu...")
-                        break # Quebra o while interno e volta para o menu principal
+                        break # Quebra o while deste case e volta para o menu principal
                         
                     case _:
                         print("Opção inválida no exercício de listas.")
