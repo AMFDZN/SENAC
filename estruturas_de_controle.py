@@ -2,16 +2,65 @@
 # Crie um programa que peça ao usuário para digitar dois números e compare-os utilizando 
 # os operadores >, <, >=, <=, ==, !=. Imprima o resultado de cada comparação de forma clara 
 # e explicativa. 
+#linha divisória
+linha= "-" *30
+#-------------------
+print("-"*30)
+print("digitae dois números para fazermos algumas comparações entre os dois")
+numero1=input("digite o primeiro número: ")
+numero2=input("Digite o segundo número: ")
+#comparando o número 1 com o número 2
+maior= numero1 > numero2
+menor= numero1 < numero2
+maior_ou_igual = numero1 >= numero2
+menor_ou_igual = numero1 <= numero2
+igual = numero1 == numero2
+diferente = numero1 != numero2
+print(f"COMPARAÇÕES\n{linha}")
+if maior==True:
+    print(f"o número {numero1} é maior que o número {numero2}\n{linha}")
+if menor==True:
+    print(f"o número {numero1} é menor que o número {numero2}\n{linha}")
+if maior_ou_igual==True:
+    print(f"o número {numero1} é maior ou igual ao número {numero2}\n{linha}")
+if menor_ou_igual==True:
+    print(f"o número {numero1} é menor ou igual ao número {numero2}\n{linha}")
+if igual==True:
+    print(f"o número {numero1} é igual ao número {numero2}\n{linha}")
+if diferente==True:
+    print(f"o número {numero1} é diferente do número {numero2}\n{linha}")
 
 
 # Exercício 2  
 # Crie um programa que peça ao usuário para digitar duas palavras (strings) e compare-as 
 # utilizando os operadores >, <, ==, e !=. Exiba o resultado de cada comparação de maneira 
-# clara. 
+# clara.
+print=("\n")
+print("Digite duas palavras para fazermos algumas comparações entre elas")
+palavra1=input("Digite a primeira palavra: ") 
+palavra2=input("Digite a segunda palavra: ") 
+maior= palavra1 > palavra2
+menor= palavra1 < palavra2
+igual = palavra1 == palavra2
+diferente = palavra1 != palavra2
+print(f"COMPARAÇÕES ENTRE PALAVRAS\n{linha}")
+if maior==True:
+    print(f"o número {palavra1} é maior que o número {palavra2}\n{linha}")
+if menor==True:
+    print(f"o número {palavra1} é menor que o número {palavra2}\n{linha}")
+if igual==True:
+    print(f"o número {palavra1} é igual ao número {palavra2}\n{linha}")
+if diferente==True:
+    print(f"o número {palavra1} é diferente do número {palavra2}\n{linha}")
 # Exercício 3  
 # Crie um programa que peça ao usuário para digitar um número e uma palavra (string). 
 # Compare o número com a string utilizando os operadores == e !=. Converta o número para 
-# uma string antes da comparação. 
+# uma string antes da comparação.
+print=("\n")
+print("Digite um número e uma palavra para fazermos algumas comparações entre os dois")
+palavra1=input("Digite a primeira palavra: ") 
+numero1=input("Digite um número: ") 
+ 
 # Exercício 4  
 # Crie um programa que peça ao usuário para digitar duas palavras. O programa deve 
 # comparar o comprimento das duas palavras e dizer qual delas tem mais caracteres ou se 

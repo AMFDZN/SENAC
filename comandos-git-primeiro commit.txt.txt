@@ -1,0 +1,147 @@
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git init
+Reinitialized existing Git repository in C:/Users/ACELIOMAGDALENAFILHO/Desktop/aula1/.git/
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git: clone
+bash: git:: command not found
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git remote add origin https://github.com/AMFDZN/SENAC.git
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git remote -v
+origin  https://github.com/AMFDZN/SENAC.git (fetch)
+origin  https://github.com/AMFDZN/SENAC.git (push)
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ it commit -m "enviando arquivos da pasta aula1"
+bash: it: command not found
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git config user.name AMFDZN
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git config user.email amfdzn@gmail.com
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git remote add origin https://github.com/AMFDZN/SENAC
+error: remote origin already exists.
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git remote -v
+origin  https://github.com/AMFDZN/SENAC.git (fetch)
+origin  https://github.com/AMFDZN/SENAC.git (push)
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git add .
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git commit -m "enviando os arquivos da pasta aula1"
+[main (root-commit) 5e9977a] enviando os arquivos da pasta aula1
+ 13 files changed, 306 insertions(+)
+ create mode 100644 aula1.py
+ create mode 100644 aula1.zip
+ create mode 100644 aula2.py
+ create mode 100644 estruturas_de_controle.py
+ create mode 100644 exercicios2.py
+ create mode 100644 if-else-diferente.py
+ create mode 100644 if-else-igual.py
+ create mode 100644 if-else-maior-ou-igual.py
+ create mode 100644 if-else-maior.py
+ create mode 100644 if-else-menor-ou-igual.py
+ create mode 100644 if-else-menor.py
+ create mode 100644 supressao.py
+ create mode 100644 textos.txt
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git push origin main
+info: please complete authentication in your browser...
+To https://github.com/AMFDZN/SENAC.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/AMFDZN/SENAC.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git branch -m "dev"
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (dev)
+$ git add .
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (dev)
+$ git commit -m "mudança no supressão"
+[dev 791a3a0] mudança no supressão
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (dev)
+$ git push origin dev
+Enumerating objects: 18, done.
+Counting objects: 100% (18/18), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (17/17), done.
+Writing objects: 100% (18/18), 7.03 KiB | 2.34 MiB/s, done.
+Total 18 (delta 6), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (6/6), done.
+remote: 
+remote: Create a pull request for 'dev' on GitHub by visiting:
+remote:      https://github.com/AMFDZN/SENAC/pull/new/dev
+remote: 
+To https://github.com/AMFDZN/SENAC.git
+ * [new branch]      dev -> dev
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (dev)
+$ git branch checkout main
+fatal: not a valid object name: 'main'
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (dev)
+$ git branch checkout dev
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (dev)
+$ git branch -m main
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git add .
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git commit -m "enviando os arquivos de aula"
+On branch main
+nothing to commit, working tree clean
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git add .
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git commit -m "enviando arquivos da aula"
+[main 432e4fc] enviando arquivos da aula
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git push origin main
+To https://github.com/AMFDZN/SENAC.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/AMFDZN/SENAC.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ git push --force origin main
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 301 bytes | 301.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/AMFDZN/SENAC.git
+ + 46ea13d...432e4fc main -> main (forced update)
+
+AzureAD+ACELIOMAGDALENAFILHO@INF211345 MINGW64 ~/Desktop/aula1 (main)
+$ 
