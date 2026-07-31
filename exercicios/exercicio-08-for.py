@@ -26,6 +26,10 @@ while True:
     opcao = input("Escolha sua opção: ").strip()
     match opcao:
         case "1":
+        # Exercício 1
+# Faça um programa que peça dois números ao usuário e exiba o resultado da
+# divisão. Trate divisão por zero e entradas inválidas.
+            
             Linha()
             
         case "2":
@@ -39,9 +43,7 @@ while True:
             Linha()
         case "6":
             Linha()
-# Exercício 1
-# Faça um programa que peça dois números ao usuário e exiba o resultado da
-# divisão. Trate divisão por zero e entradas inválidas.
+
     
 # Exercício 2
 # Peça a idade do usuário. Se a idade for negativa, levante um erro manualmente
