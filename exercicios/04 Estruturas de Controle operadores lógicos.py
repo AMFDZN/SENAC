@@ -12,7 +12,7 @@ if numero1 >5:
     if numero1 <7:
         print(f"Com a nota {numero1} o aluno está em RECUPERAÇÃO")
     elif numero1>10:
-        print("O aluno fraudou a sua nota, informando uma nota maior que (10)")
+        print("O aluno fraudou a sua nota, informando uma nota maior que (10)\nPor este motivo está EM RECUPERAÇÃO.")
     else:
         print(f"O aluno está Aprovado")
 else:
@@ -56,7 +56,10 @@ if numero1.lstrip("-").isdigit() and numero1 != "-":
         else:
             print(f"O número {numero1} é um número NEGATIVO, e também é um número ÍMPAR")    
 else:
-    print(F"{numero1} não é um número válido\n")
+    if numero1==0:
+        print(f"{numero1} é ZERO")
+    else:
+        print(F"{numero1} não é um número válido\n")
  
 # Exercício 4 
 # Peça ao usuário para digitar a temperatura em Celsius. Informe se está: 
@@ -65,11 +68,11 @@ else:
 # Agradável (entre 21 e 25) 
 # Quente (entre 26 e 30) 
 # Muito quente (acima de 30) 
-print("VAMOS CLASSIFICAR COMO A TEMPERATURA ESTÁ")
-temperatura=input("Informe uma temperatura em graus Celsius").strip()
+print(f"{linha}VAMOS CLASSIFICAR COMO A TEMPERATURA ESTÁ")
+temperatura=input("Informe uma temperatura em graus Celsius: ").strip()
 
 if temperatura.lstrip("-").isdigit() and temperatura != "-":
-    temperatura = int(temperatura) 
+    temperatura = int(temperatura)
     if temperatura<10:
         print("Muito frio")
     elif temperatura>=10 and temperatura<=20:
@@ -93,40 +96,54 @@ else:
 # 13 a 17 anos: Adolescente 
 # 18 a 59 anos: Adulto 
 # 60 anos ou mais: Idoso 
-print("VAMOS CLASSIFICAR SUA FAIXA ETÁRIA")
+print(f"{linha}VAMOS CLASSIFICAR SUA FAIXA ETÁRIA")
 idade=input("Informe sua idade: ").strip()
 
-if idade.isdigit() and idade>0:
+if idade.isdigit():
     idade=int(idade)
-    if idade<12:
+    if idade<12 and idade>0:
         print("Você é Criança")
     elif idade >12 and idade<18:
         print("Você é Adolescente")
     elif idade >17 and idade<60:
-        print("Você é criança")
+        print("Você é Adulto")
+    elif idade >59:
+        print("Você é Idoso")
     else:
         print("Idade inválida")
 else:
-    print(f"{idade} não é um valor numério válido para idade")    
+    print(f"{idade} não é um valor numério.")    
 # Exercício 6 
 # Crie um programa que peça ao usuário para digitar três números e informe qual deles é o 
 # maior. 
-print("INFORME 3 NÚMEROS INTEIROS, A PARTIR DE ZERO, PARA VERIFICAR QUAL DELES É MAIOR")
+print(f"{linha}INFORME 3 NÚMEROS INTEIROS, A PARTIR DE ZERO, PARA VERIFICAR QUAL DELES É MAIOR")
 numero1 = input("Digite o primeiro número: ").strip()
-if not numero1.isdigit() or numero1<=0:
+
+if not numero1.isdigit():
+    numero1 = input(f"{numero1} não é um valor válido\nDigite novamente o primeiro número: ").strip()
+elif int(numero1)<=0:
     numero1 = input(f"{numero1} não é um valor válido\nDigite novamente o primeiro número: ").strip()
 else:
     numero1=int(numero1)
+      
 numero2 = input("Digite o segundo número: ").strip()
-if not numero2.isdigit() or numero2<=0:
-    numero2 = input(f"{numero2} não é um valor válido\nDigite novamente o primeiro número: ").strip()
+if not numero2.isdigit():
+    numero2 = input(f"{numero2} não é um valor válido\nDigite novamente o segundo número: ").strip()
+elif int(numero2)<=0:
+    numero2 = input(f"{numero2} não é um valor válido\nDigite novamente o segundo número: ").strip()
 else:
-    numero2=int(numero2) 
+    numero2=int(numero2)
+numero2=int(numero2)
+    
 numero3 = input("Digite o primeiro número: ").strip()
-if not numero3.isdigit() or numero3<=0:
-    numero3 = input(f"{numero3} não é um valor válido\nDigite novamente o primeiro número: ").strip()
+if not numero3.isdigit():
+    numero3 = input(f"{numero3} não é um valor válido\nDigite novamente o terceiro número: ").strip()
+elif int(numero3)<=0:
+    numero3 = input(f"{numero3} não é um valor válido\nDigite novamente o terceiro número: ").strip()
 else:
-    numero2=int(numero3)
+    numero3=int(numero3)
+numero3=int(numero3) #não consegui validar
+
 #comparação
 numeroMaior=numero1
 
@@ -140,12 +157,13 @@ print(f"{numeroMaior} é o maior número entre os três")
  
 # Exercício 7 
 # Crie um programa que peça um número inteiro e diga se ele é múltiplo de 3, de 5, de 
-# ambos, ou de nenhum. 
+# ambos, ou de nenhum.
+print(f"{linha}VAMOS FAZER UMA ANÁLISE DE UM NÚMERO\nEM RELAÇÃO À SUA \"MULTIPLICIDADE\" POR 3 E POR 5:") 
 numero1=input("Informe o número para o teste: ").strip()
 if not numero1.isdigit():
-    numero1=int(numero1)
+    numero1=input("Informe o NÚMERO para o teste: ").strip()
 else:
-    
+    numero1=int(numero1)
     if numero1 % 3 == 0 and numero1 % 5 == 0:
         print(f"O número {numero1} é múltiplo de ambos (3 e 5).")
     elif numero1 % 3 == 0:
@@ -160,10 +178,19 @@ else:
 # A senha deve ter pelo menos 8 caracteres 
 # Deve conter pelo menos uma letra minúscula 
 # Se a senha for válida, imprima Senha válida, senão imprima qual regra ela não passou. 
-print("VAMOS FAZER UM TESTE DE VALIDAÇÃO, SIMULANDO A FORMATAÇÃO ACEITA EM UMA SENHA")
+print(f"{linha}VAMOS FAZER UM TESTE DE VALIDAÇÃO, SIMULANDO A FORMATAÇÃO ACEITA EM UMA SENHA")
 senha=input("DIGITE A SENHA\nDeve ter pelo menos 8 caracteres.\nDeve conter pelo menos uma letra minúscula\n")
 
 #if senha >8 and senha.
 """ ideia
-validar se asenha em uppercase -e igual a em lower case
+validar se a senha em uppercase -e igual a em lower case, se não for é cero que tem ao menosuma maiúscula
 """
+senhaUpper = senha.upper()
+if senhaUpper == senha or len(senha) >= 8:
+    if senhaUpper==senha:
+        print("Senha inválida\nNão há uma letra minúscula na senha")
+    else:
+        print("Senha inválida\nA senha precisa ter 8 ou mais catacteres")
+else:
+    print("Senha válida")
+    
