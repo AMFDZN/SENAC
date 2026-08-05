@@ -101,6 +101,7 @@ print("exercício 6")
 # Exercício 6  
 # Pergunte ao usuário se está chovendo s ou n. 
 # Informe se ele pode sair sem guarda-chuva, ou se deve levar. 
+###
 
  
 # Exercício 7  
