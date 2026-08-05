@@ -1,0 +1,113 @@
+VERIFICAR SE TEM PASTA .GIT DENTRO DO DIRETÓRIO
+
+entrar na branch dev !!!!!
+
+CRIAR PASTA [inicio] NO DESKTOP, DENTRO, PASTA [SENAC]
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (main)
+$ git config user.main
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (main)
+$ git config user.name AMFDZN
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (main)
+$ git config user.email amfdzn@gmail.com
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (main)
+$ git add .
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (main)
+$ git commit -m "fim de aula terça"
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (main)
+$ git  init
+Reinitialized existing Git repository in C:/Users/ACELIOMAGDALENAFILHO/Desktop/inicio/SENAC/.git/
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (main)
+$ git commit -m "fim de aula terça"
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   "exercicios/05 Estruturas de Controle operadores l\303\263gicos.py"
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (main)
+$ git add .
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (main)
+$ git commit -m "fim de aula terça"
+[main a948e04] fim de aula terça
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (main)
+$ git branch -m "dev"
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (dev)
+$ git add .
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (dev)
+$ git commit -m "fim de aula terça"
+On branch dev
+Your branch is ahead of 'origin/main' by 2 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   "exercicios/05 Estruturas de Controle operadores l\303\263gicos.py"
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (dev)
+$ git commit -m "fim de aula terça"
+On branch dev
+Your branch is ahead of 'origin/main' by 2 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   "exercicios/05 Estruturas de Controle operadores l\303\263gicos.py"
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (dev)
+$
+ *  History restored 
+
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (dev)
+$ git add .
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (dev)
+$ git commit -m "terça"
+[dev 1cbaa15] terça
+ 1 file changed, 1 insertion(+)
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (dev)
+$ git push origin dev
+Enumerating objects: 16, done.
+Counting objects: 100% (16/16), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (13/13), done.
+Writing objects: 100% (13/13), 2.99 KiB | 2.99 MiB/s, done.
+Total 13 (delta 9), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (9/9), completed with 3 local objects.
+To https://github.com/AMFDZN/SENAC.git
+   6f06028..1cbaa15  dev -> dev
+
+AzureAD+ACELIOMAGDALENAFILHO@INF228869 MINGW64 ~/Desktop/inicio/SENAC (dev)
+$
+
+
+
