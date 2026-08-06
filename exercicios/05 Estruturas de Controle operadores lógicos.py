@@ -98,11 +98,16 @@ else:
 # Pergunte ao usuário se ele tem dinheiro s ou n e convite s ou n. 
 # Informe se ele pode entrar no evento, ou porque tem dinheiro ou tem convite. 
 print("exercício 5")
+
 # Exercício 6  
 # Pergunte ao usuário se está chovendo s ou n. 
 # Informe se ele pode sair sem guarda-chuva, ou se deve levar. 
 ###
-
+chove=input("Está chovendo agora? (s/n)").strip().lower()
+if chove == "s":
+    print("leve o guarda-chuva")
+else:
+    print("Saia tranquilo. N~eo precisa de guarda-chuva")
  
 # Exercício 7  
 # Peça uma letra ao usuário. 
