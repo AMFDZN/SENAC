@@ -97,13 +97,20 @@ else:
 # Exercício 5  
 # Pergunte ao usuário se ele tem dinheiro s ou n e convite s ou n. 
 # Informe se ele pode entrar no evento, ou porque tem dinheiro ou tem convite. 
-print("exercício 5")
-
+print(f"{linha} - exercício 5")
+temDinheiro=input("Você tem dinheiro? (s/n)").lower()
+temConvite=input("Você tem convite? (s/n").lower()
+if temDinheiro=="s" or temConvite=="s":
+    print("Você pode entrar no evento")
+    if temDinheiro=="s":
+        print=("Você tem dinheiro.")
+    else:
+        print=("Você tem convite.")
 # Exercício 6  
 # Pergunte ao usuário se está chovendo s ou n. 
 # Informe se ele pode sair sem guarda-chuva, ou se deve levar. 
 ###
-chove=input("Está chovendo agora? (s/n)").strip().lower()
+chove=input(f"{linha}Está chovendo agora? (s/n)").strip().lower()
 if chove == "s":
     print("leve o guarda-chuva")
 else:
