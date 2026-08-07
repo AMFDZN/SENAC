@@ -45,33 +45,32 @@ if numero1<0 and numero2<0:
     print("os dois números são negativos")
 else:
     if numero1<0:
-        print(f"Os dois não são negativos, por que o número {numero1} é negativo")
+        print(f"Onúmero {numero1} é negativo")
     elif numero2<0:
-        print(f"Os dois não são negativos, por que o número {numero2} é negativo")
+        print(f"O número {numero2} é negativo")
     else:
-        print(f"os números {numero1} e{numero2} são negativos") 
+        print(f"os números {numero1} e {numero2} são positivos") 
 # Exercício 3  
 # Peça para o usuário digitar um número. 
 # Informe se o número não é zero. 
 
-# Exercício 2  
-# Peça para o usuário digitar dois números. 
-# Verifique e informe se pelo menos um dos números é negativo. 
 print(f"{linha}VERIFICANDO SE O NÚMERO É ZERO")
 numero1=input("Digite o número: ").strip()
 if numero1.lstrip("-").isdigit() and numero1 != "-":
     numero1 = int(numero1)
 else:
     numero1=input(f"{numero1} não é um número\nDigite um NÚMERO: ").strip()
+        
 if numero1==0:
     print("O número é ZERO")
 else:
-    print()
+    print("O número não é ZERO")
+
 # Exercício 4  
 # Peça a idade do usuário e se ele tem carteira de motorista s ou n. 
 # Informe se a pessoa pode dirigir, verificando se a idade é maior ou igual a 18 e tem 
 # carteira. 
-print(f"{linha}VAMOS CLASSIFICAR SUA FAIXA ETÁRIA")
+print(f"{linha}VAMOS CONFERIR SEU DIREITO DE DIRIGIR")
 idade=input("Informe sua idade: ").strip()
 if idade.isdigit():
     idade=int(idade)
@@ -79,18 +78,19 @@ else:
     print(f"{idade} não é um valor numério.")
     idade=input("Informe novamente a sua idade usando um número: ").strip()
 idade=int(idade)
-temCarteira=input("Você tem carteira de motorista: (s/n) ")
-if temCarteira.lower()!="s" or temCarteira.lower()!="n":
-    temCarteira=input("Responda apenas usndo as letras s= sim e n=não\nVocê tem carteira de motorista: (s/n) ")
+temCarteira=input("Você tem carteira de motorista: (s/n) ").lower()
+
+#if temCarteira!="s" or temCarteira!="n":
+#    temCarteira=input("Responda apenas usndo as letras s= sim e n=não\nVocê tem carteira de motorista: (s/n) ")
     
 
 if idade>0:
     if idade >17 and temCarteira.lower()=="s":
         print("Você pode dirigir")
-    elif idade >17 and temCarteira.lower()=="n":
+    elif idade >17 or temCarteira.lower()=="n":
         print("Você não pode dirigir")
 else:
-    print("Idade inválida")
+    print("Você não pode dirigir")
     
     
   
@@ -98,23 +98,26 @@ else:
 # Pergunte ao usuário se ele tem dinheiro s ou n e convite s ou n. 
 # Informe se ele pode entrar no evento, ou porque tem dinheiro ou tem convite. 
 print(f"{linha} - exercício 5")
-temDinheiro=input("Você tem dinheiro? (s/n)").lower()
-temConvite=input("Você tem convite? (s/n").lower()
+temDinheiro=input("Você tem dinheiro? (s/n) ").lower()
+temConvite=input("Você tem convite? (s/n) ").lower()
+
 if temDinheiro=="s" or temConvite=="s":
     print("Você pode entrar no evento")
     if temDinheiro=="s":
         print=("Você tem dinheiro.")
     else:
         print=("Você tem convite.")
+else:
+    print("Você não pode entrar no evento")
 # Exercício 6  
 # Pergunte ao usuário se está chovendo s ou n. 
 # Informe se ele pode sair sem guarda-chuva, ou se deve levar. 
 ###
-chove=input(f"{linha}Está chovendo agora? (s/n)").strip().lower()
-if chove == "s":
+chove=input(f"{linha}Está chovendo agora? (s/n) ").strip()
+if chove.lower() == "s":
     print("leve o guarda-chuva")
 else:
-    print("Saia tranquilo. N~eo precisa de guarda-chuva")
+    print("Saia tranquilo. não precisa de guarda-chuva")
  
 # Exercício 7  
 # Peça uma letra ao usuário. 
