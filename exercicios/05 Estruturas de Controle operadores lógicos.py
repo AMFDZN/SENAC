@@ -113,7 +113,8 @@ else:
 # Pergunte ao usuário se está chovendo s ou n. 
 # Informe se ele pode sair sem guarda-chuva, ou se deve levar. 
 ###
-chove=input(f"{linha}Está chovendo agora? (s/n) ").strip()
+print(f"{linha}VERIRICANDO A OPÇÃO DE LEVAR GUARDA-CHUVA OU NÃO")
+chove=input("Está chovendo agora? (s/n) ").strip()
 if chove.lower() == "s":
     print("leve o guarda-chuva")
 else:
@@ -122,6 +123,17 @@ else:
 # Exercício 7  
 # Peça uma letra ao usuário. 
 # Verifique se é uma única letra e se é vogal ou consoante. 
+print(f"{linha}VAMOS COMPARAR UMA LETRA PARA SABER SE ELA É VOGAL OU CONSOANTE")
+letra1=input("Digite a letra para a comparação: ").lower()
+letra1=letra1.strip()
+vogais="aeiou"
+if letra1.isalpha() and len(letra1) == 1: #verifica se não é um input numérico e se é somente uma letra
+    if letra1 in vogais:
+        print(f" a letra ({letra1}) é uma vogal.")
+    else:
+        print(f"a letra ({letra1}) é uma consoante.")
+else:
+    print(f"você informou {letra1}. Isto não é uma letra válida.")
  
 # Exercício 8  
 # Peça um texto ao usuário. 
@@ -129,11 +141,24 @@ else:
 # Você não digitou nada se estiver vazio 
 # Texto maior que 10 caracteres 
 # Texto com 10 ou menos caracteres 
- 
+print(f"{linha}VAMOS VERIFICAR SUA ENTRADA, SE É VÁLIDA") 
+texto1=input("Escreva uma frase para contarmos quantas letras ela tem: ")
+if not texto1 or texto1==" " or len(texto1)<1:
+    texto1=input("Você não digitou nada!\nTente outra vez, ou use ENTER para desistir.\nEscreva UMA FRASE para contarmos quantas letras ela tem: ")
+else:
+    textoSplit=texto1.split()
+    if len(textoSplit)<=9:
+        print=(f"A frase {texto1} tem menos de 10 caracteres")
+    else:
+        print=(f"A frase {texto1} tem 10 ou mais caracteres.")
+
 # Exercício 9  
 # Usando o texto fixo "Python é incrível!, peça uma letra para o usuário. 
-# Informe se a letra está no texto e é uma letra válida alfabeto. 
- 
+# Informe se a letra está no texto e é uma letra válida alfabeto.
+frase = "Python é incrível!"
+letra1=input(f"{linha}VAMOS VER SE A LETRA ESCOLHIDA POR VOCÊ EXISTE NA FRASE ABAIXO\n - \"{frase}\"\n\nEscolha a letra: ").strip()
+if letra1.isalpha() and letra1 in frase:
+    print(f" a letra {letra1} é uma letra válida, e ela está na frase.")
 # Exercício 10  
 # Peça um número inteiro. 
 # Informe se é: 
@@ -141,8 +166,22 @@ else:
 # Positivo e ímpar 
 # Zero 
 # Negativo e par 
-# Negativo e ímpar 
- 
+# Negativo e ímpar
+numero1=input(f"{linha}DIGITE UM NÚMERO PARA CLASSIFICARMOS ELE NO CONTEXTO NUMÉRICO: ").strip() 
+if numero1.isdigit():
+    num = int(numero1)
+    if num > 0 and num % 2 == 0:
+        print(F"o Número {numero1} é um número par, e é positivo")
+    elif num > 0 and num % 2 != 0:
+        print(F"o Número {numero1} é um número ímpar, e é positivo.")
+    elif num < 0 and num % 2 == 0:
+            print(F"o Número {numero1} é um número par, e é negativo")
+    elif num < 0 and num % 2 != 0:
+            print(F"o Número {numero1} é um número ímpar, e é negativo.")
+    elif num == 0:
+        print(F"O número unformado é zero.")
+else:
+    print("Você não informou um número.")
  
  
  
@@ -152,19 +191,60 @@ else:
 # Informe: 
 # Se algum está vazio informe que não pode ser vazio 
 # Se usuário for admin e senha 1234, acesso permitido 
-# Caso contrário, acesso negado 
- 
+# Caso contrário, acesso negado
+print("VERIFICAÇÃO DE LOGIN?")
+nomeUsuario = input("Informe o seu nome de usuário: ")
+senhaUsuario = input("Informe sua senha: ")
+
+if not nomeUsuario or not senhaUsuario:
+    print("ERRO: O nome de usuário ou a senha não poder ser vazios.")
+elif nomeUsuario == "admin" and senhaUsuario == "1234":
+    print("Acesso permitido.")
+else:
+    print("Acesso negado.") 
 # Exercício 12 
 # Peça a nota 0 a 10 e o número de faltas. 
 # Informe: 
 # Aprovado se nota ≥ 7 e faltas ≤ 3 
 # Recuperação se nota ≥ 5 ou faltas ≤ 5 
 # Reprovado caso contrário 
- 
+nota=input(f"{linha}VAMOS VER SE VOCÊ FOI APROVADO.\n - Informe sua nota final:  ")
+faltas=input("- Informe o número de faltas que você tem:  ")
+aprovado=nota>=7 and faltas <=3
+recuperacao=nota >= 5 or faltas <= 5
+if aprovado:
+    print("aprovado")
+elif recuperacao:
+    print("recuperação")
+else:
+    print("reprovado")
+
 # Exercício 13  
 # Peça para o usuário digitar dois números. 
 # Informe se pelo menos um é positivo e pelo menos um é par. 
- 
+numero1=input(f"{linha}DIGITE DOIS NÚMEROS PARA AVALIARMOS\n Informre o primeiro número: ").strip() 
+if numero1.isdigit():
+    num = int(numero1)
+numero2=input("Informe o segundo número: ")
+if numero2.isdigit():
+    num = int(numero2)
+
+
 # Exercício 14  
 # Peça uma resposta s ou n para as perguntas: Está chovendo? e Está frio? 
 # Informe se não está chovendo ou não está frio.
+print(f"{linha}RESPONDA ÀS PERGUNTAS ABAIXO USANDO (s) PARA SIM, E (n) PARA NÃO")
+chovendo=input("Está chovendo? ").lower()
+frio=input("Está frio? ").lower()
+if not print or not chovendo or not print.isalpha() or not chovendo.isalpha():
+    print("Você não informou um dos dados da forma solicitada")
+else:
+    if chovendo=="s":
+        print("Está chovendo")
+    else:
+        print("Não está chovendo")
+
+    if frio =="s":
+        print("EStá frio")
+    else:
+        print("Está frio.")
