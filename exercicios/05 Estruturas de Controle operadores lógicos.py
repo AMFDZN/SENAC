@@ -20,9 +20,9 @@ if numero1>0 and numero2>0:
     print("os dois números são positivos")
 else:
     if numero1<0 and numero2>0:
-        print(f"O número {numero1} é negativo")
+        print(f"Os dois números não são positivos pois o número {numero1} é negativo")
     elif numero2<0 and numero1>0:
-        print(f"O número {numero2} é negativo")
+        print(f"Os dois números não são positivos pois o número {numero2} é negativo")
     else:
         print(f"os números {numero1} e {numero2} são negativos")
 # Exercício 2  
@@ -142,15 +142,16 @@ else:
 # Texto maior que 10 caracteres 
 # Texto com 10 ou menos caracteres 
 print(f"{linha}VAMOS VERIFICAR SUA ENTRADA, SE É VÁLIDA") 
-texto1=input("Escreva uma frase para contarmos quantas letras ela tem: ")
-if not texto1 or texto1==" " or len(texto1)<1:
-    texto1=input("Você não digitou nada!\nTente outra vez, ou use ENTER para desistir.\nEscreva UMA FRASE para contarmos quantas letras ela tem: ")
+texto=input("Escreva uma frase para contarmos quantas letras ela tem: ").strip()
+
+if not texto:
+    print("Você não digitou nada!")
+# 2. Verifica se tem mais de 10 caracteres
+elif len(texto) > 10:
+    print(f"Texto maior que 10 caracteres. (Total: {len(texto)} caracteres)")
+# 3. Se não for vazio e não for > 10, tem 10 ou menos
 else:
-    textoSplit=texto1.split()
-    if len(textoSplit)<=9:
-        print=(f"A frase {texto1} tem menos de 10 caracteres")
-    else:
-        print=(f"A frase {texto1} tem 10 ou mais caracteres.")
+    print(f"Texto com 10 ou menos caracteres. (Total: {len(texto)} caracteres)")
 
 # Exercício 9  
 # Usando o texto fixo "Python é incrível!, peça uma letra para o usuário. 
@@ -192,7 +193,7 @@ else:
 # Se algum está vazio informe que não pode ser vazio 
 # Se usuário for admin e senha 1234, acesso permitido 
 # Caso contrário, acesso negado
-print("VERIFICAÇÃO DE LOGIN?")
+print(f"{linha}VERIFICAÇÃO DE LOGIN?")
 nomeUsuario = input("Informe o seu nome de usuário: ")
 senhaUsuario = input("Informe sua senha: ")
 
@@ -209,15 +210,18 @@ else:
 # Recuperação se nota ≥ 5 ou faltas ≤ 5 
 # Reprovado caso contrário 
 nota=input(f"{linha}VAMOS VER SE VOCÊ FOI APROVADO.\n - Informe sua nota final:  ")
+if nota.isdigit():
+    nota=int(nota)
 faltas=input("- Informe o número de faltas que você tem:  ")
-aprovado=nota>=7 and faltas <=3
-recuperacao=nota >= 5 or faltas <= 5
-if aprovado:
-    print("aprovado")
-elif recuperacao:
-    print("recuperação")
+if faltas.isdigit():
+    faltas=int(faltas)
+if nota>=7 and faltas <=3:
+    print("Aprovado")
+elif nota >= 5 or faltas <= 5:
+    print("Em recuperação")
 else:
-    print("reprovado")
+    print("Reprovado")
+
 
 # Exercício 13  
 # Peça para o usuário digitar dois números. 
@@ -228,7 +232,10 @@ if numero1.isdigit():
 numero2=input("Informe o segundo número: ")
 if numero2.isdigit():
     num = int(numero2)
-
+if numero1>0 or numero2>0:
+    print("Pelo menos um ddos números é positivo")
+if numero1 % 2 == 0 or numero2 % 2 == 0:
+    print("Pelo menos um dos números é par")
 
 # Exercício 14  
 # Peça uma resposta s ou n para as perguntas: Está chovendo? e Está frio? 
