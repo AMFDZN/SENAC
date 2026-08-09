@@ -1,0 +1,62 @@
+NOS TERMINAIS - PARA EVITAR CONFLITOS DE reconhecimento de mudanças
+
+
+linux
+git config --global core.autocrlf input
+
+
+no windows 11 - tentar com --global - se não der retirar este parâmetro
+git config --global core.autocrlf true
+
+git config --global user.name "Seu Nome"
+git config --global user.email "seu-email@exemplo.com"
+-------------------
+conctando
+
+git init
+
+# 1. IDENTIFICAÇÃO DE AUTORIA (Obrigatório antes do primeiro commit)
+git config user.name "Seu Nome ou User do GitHub"
+git config user.email "seu-email@exemplo.com"
+
+git branch -M main
+git remote add origin https://github.com/AMFDZN/SENAC.git
+git fetch origin
+git checkout -b dev origin/dev
+git pull origin dev --rebase
+
+
+Rotina Diária de Trabalho (Para Evitar Conflitos)
+Sempre usar este fluxo para alternar entre a máquina da escola e a de casa sem sobreposição de código:
+
+iniciando (no Pop!_OS ou Windows):
+
+
+git pull origin dev
+
+Ao finalizar as alterações:
+
+git add .
+git commit -m "alterações de hoje"
+git push origin dev
+
+5. Arquivo .gitignore Recomendado
+
+Crie um arquivo chamado .gitignore na raiz da pasta [SENAC] para impedir o envio de arquivos temporários do VS Code ou do sistema operacional:
+
+Plaintext
+# VS Code
+.vscode/
+
+# Sistema Operacional Windows
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node / Dependências (se aplicável)
+node_modules/
+dist/
+.env
+
+#arquivos de teste, ou comfigs locais
+

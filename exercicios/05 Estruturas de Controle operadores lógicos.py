@@ -104,9 +104,9 @@ temConvite=input("Você tem convite? (s/n) ").lower()
 if temDinheiro=="s" or temConvite=="s":
     print("Você pode entrar no evento")
     if temDinheiro=="s":
-        print=("Você tem dinheiro.")
+        print("Você tem dinheiro.")
     else:
-        print=("Você tem convite.")
+        print("Você tem convite.")
 else:
     print("Você não pode entrar no evento")
 # Exercício 6  
@@ -142,16 +142,16 @@ else:
 # Texto maior que 10 caracteres 
 # Texto com 10 ou menos caracteres 
 print(f"{linha}VAMOS VERIFICAR SUA ENTRADA, SE É VÁLIDA") 
-texto=input("Escreva uma frase para contarmos quantas letras ela tem: ").strip()
+frase=input("Escreva uma frase para contarmos quantas letras ela tem: ").strip()
 
-if not texto:
+if not frase:
     print("Você não digitou nada!")
 # 2. Verifica se tem mais de 10 caracteres
-elif len(texto) > 10:
-    print(f"Texto maior que 10 caracteres. (Total: {len(texto)} caracteres)")
+elif len(frase) > 10:
+    print(f"Texto maior que 10 caracteres. (Total: {len(frase)} caracteres)")
 # 3. Se não for vazio e não for > 10, tem 10 ou menos
 else:
-    print(f"Texto com 10 ou menos caracteres. (Total: {len(texto)} caracteres)")
+    print(f"Texto com 10 ou menos caracteres. (Total: {len(frase)} caracteres)")
 
 # Exercício 9  
 # Usando o texto fixo "Python é incrível!, peça uma letra para o usuário. 
@@ -159,8 +159,10 @@ else:
 frase = "Python é incrível!"
 letra1=input(f"{linha}VAMOS VER SE A LETRA ESCOLHIDA POR VOCÊ EXISTE NA FRASE ABAIXO\n - \"{frase}\"\n\nEscolha a letra: ").strip()
 if letra1.isalpha() and letra1 in frase:
-    print(f" a letra {letra1} é uma letra válida, e ela está na frase.")
-# Exercício 10  
+    print(f"A letra {letra1} é uma letra válida, e ela está na frase.")
+else:
+    print(f"A letra {letra1} não está na frase, ou não é uma letra.")
+    # Exercício 10  
 # Peça um número inteiro. 
 # Informe se é: 
 # Positivo e par 
@@ -169,7 +171,7 @@ if letra1.isalpha() and letra1 in frase:
 # Negativo e par 
 # Negativo e ímpar
 numero1=input(f"{linha}DIGITE UM NÚMERO PARA CLASSIFICARMOS ELE NO CONTEXTO NUMÉRICO: ").strip() 
-if numero1.isdigit():
+if numero1.lstrip("-").isdigit():
     num = int(numero1)
     if num > 0 and num % 2 == 0:
         print(F"o Número {numero1} é um número par, e é positivo")
@@ -216,22 +218,24 @@ faltas=input("- Informe o número de faltas que você tem:  ")
 if faltas.isdigit():
     faltas=int(faltas)
 if nota>=7 and faltas <=3:
-    print("Aprovado")
-elif nota >= 5 or faltas <= 5:
-    print("Em recuperação")
+    print("Você está: Aprovado")
+elif nota >= 5 or faltas <= 3:
+    print("Você está: Em recuperação")
+elif nota<5:
+    print("Você está: Reprovado")
 else:
-    print("Reprovado")
+    print("Você está: Reprovado")
 
 
 # Exercício 13  
 # Peça para o usuário digitar dois números. 
 # Informe se pelo menos um é positivo e pelo menos um é par. 
 numero1=input(f"{linha}DIGITE DOIS NÚMEROS PARA AVALIARMOS\n Informre o primeiro número: ").strip() 
-if numero1.isdigit():
-    num = int(numero1)
-numero2=input("Informe o segundo número: ")
-if numero2.isdigit():
-    num = int(numero2)
+if numero1.lstrip("-").isdigit():
+    numero1 = int(numero1)
+numero2=input("Informe o segundo número: ").strip()
+if numero2.lstrip("-").isdigit():
+    numero2 = int(numero2)
 if numero1>0 or numero2>0:
     print("Pelo menos um ddos números é positivo")
 if numero1 % 2 == 0 or numero2 % 2 == 0:
@@ -243,15 +247,15 @@ if numero1 % 2 == 0 or numero2 % 2 == 0:
 print(f"{linha}RESPONDA ÀS PERGUNTAS ABAIXO USANDO (s) PARA SIM, E (n) PARA NÃO")
 chovendo=input("Está chovendo? ").lower()
 frio=input("Está frio? ").lower()
-if not print or not chovendo or not print.isalpha() or not chovendo.isalpha():
+if not frio or not chovendo or not frio.isalpha() or not chovendo.isalpha():
     print("Você não informou um dos dados da forma solicitada")
 else:
     if chovendo=="s":
-        print("Está chovendo")
+        print("- Está chovendo")
     else:
-        print("Não está chovendo")
+        print("-Não está chovendo")
 
     if frio =="s":
-        print("EStá frio")
+        print("- Está frio")
     else:
-        print("Está frio.")
+        print("- Está frio.")
