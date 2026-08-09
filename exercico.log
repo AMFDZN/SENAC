@@ -1,0 +1,59 @@
+09/08/2026 20:46:19 - INFO - Programa iniciado.
+09/08/2026 20:46:26 - WARNING - Usuário selecionou a opção inválida(_).
+09/08/2026 20:46:36 - INFO - Programa iniciado.
+09/08/2026 20:46:45 - INFO - 
+Exercício 1:
+
+09/08/2026 20:47:17 - WARNING - ⚠ Usuário digitou um valor não inteiro para a quantidade de chaves.
+09/08/2026 20:47:56 - INFO - Programa iniciado.
+09/08/2026 20:47:59 - INFO - 
+Exercício 1:
+
+09/08/2026 20:48:12 - INFO - 1. Dicionário printado ao usuário:
+ {'nome': 'Acelio'}
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+09/08/2026 20:48:12 - INFO - 2. Printadas as Chaves:
+ ['nome']
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+09/08/2026 20:48:12 - INFO - 3. Printados os valores:
+ ['Acelio']
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+09/08/2026 20:48:12 - INFO - 4. Printandos os pares (chave,valor):
+ [('nome', 'Acelio')]
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+09/08/2026 20:48:12 - INFO - ╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
+Ex. 1 finalizado
+
+09/08/2026 20:48:35 - INFO - 
+Exercício 2
+
+09/08/2026 20:48:35 - INFO - 
+Lista de alunos e suas notas:
+09/08/2026 20:48:35 - INFO - 🠆alunoAluno1
+Nome: Eu
+ Notas: [7.4, 8, 5.2]
+ Média: 6.9
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+09/08/2026 20:48:35 - INFO - 🠆alunoAluno2
+Nome: Tu
+ Notas: [8.0, 5.3, 6.7]
+ Média: 6.7
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+09/08/2026 20:48:35 - INFO - 🠆alunoAluno3
+Nome: Ele
+ Notas: [6.4, 8, 5.2]
+ Média: 6.5
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+09/08/2026 20:48:35 - INFO - 🠆alunoAluno4
+Nome: Ela
+ Notas: [7.4, 6.7, 6.2]
+ Média: 6.8
+╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+
+09/08/2026 20:48:35 - INFO - Média geral dos alunos da turma: (6.71)
+╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
+09/08/2026 20:48:35 - INFO - Ex. 2 finalizado
+╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍╍
