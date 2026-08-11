@@ -145,11 +145,11 @@ def alteraIntervalo():
 def adicionaColuna():
     if not verificaArquivo(): return
     df = lerPlanilha("r")
-    nova_col = input("Nome da nova coluna: ")
-    val_padrao = input("Valor padrão para os registros: ")
-    df[nova_col] = val_padrao
-    df.to_excel(CAMINHO_COMPLETO, index=False)
-    print(f"Coluna '{nova_col}' adicionada!")
+    novaColuna = input("Nome da nova coluna: ")
+    valorPadrao = input("Valor padrão para os registros: ")
+    df[novaColuna] = valorPadrao
+    df.to_excel(CAMINHOCOMPLETO, index=False)
+    print(f"Coluna '{novaColuna}' adicionada!")
 
 # Exercício 7
 # Crie uma função que permita remover uma coluna existente da planilha.
@@ -159,7 +159,7 @@ def removeColuna():
     coluna = input("Nome da coluna a remover: ")
     if coluna in df.columns:
         df = df.drop(columns=[coluna])
-        df.to_excel(CAMINHO_COMPLETO, index=False)
+        df.to_excel(CAMINHOCOMPLETO, index=False)
         print(f"Coluna '{coluna}' removida.")
     else:
         print("Coluna não encontrada.")
@@ -174,9 +174,9 @@ def adicionaLinha():
         qtd = int(input("Quantidade: "))
         preco = float(input("Preço: "))
         
-        nova_linha = pd.DataFrame([{"Produto": prod, "Quantidade": qtd, "Preço": preco}])
-        df = pd.concat([df, nova_linha], ignore_index=True)
-        df.to_excel(CAMINHO_COMPLETO, index=False)
+        novaLinha = pd.DataFrame([{"Produto": prod, "Quantidade": qtd, "Preço": preco}])
+        df = pd.concat([df, novaLinha], ignore_index=True) # .concat (join) ignore_index=True - esquece o íncide anterior
+        df.to_excel(CAMINHOCOMPLETO, index=False)
         print("Produto adicionado com sucesso!")
     except ValueError:
         print("Erro: Quantidade deve ser inteira e Preço deve ser número.")
@@ -189,7 +189,7 @@ def removeLinha():
     try:
         idx = int(input(f"Digite o índice da linha para remover (0 a {len(df)-1}): "))
         df = df.drop(index=idx).reset_index(drop=True)
-        df.to_excel(CAMINHO_COMPLETO, index=False)
+        df.to_excel(CAMINHOCOMPLETO, index=False)
         print("Linha removida com sucesso.")
     except Exception as e:
         print(f"Erro ao remover linha: {e}")
@@ -202,7 +202,7 @@ def aplicaDesconto():
     try:
         desc = float(input("Digite o percentual de desconto (ex: 10 para 10%): "))
         df["Preço"] = df["Preço"] * (1 - desc / 100)
-        df.to_excel(CAMINHO_COMPLETO, index=False)
+        df.to_excel(CAMINHOCOMPLETO, index=False)
         print(f"Desconto de {desc}% aplicado com sucesso!")
     except ValueError:
         print("Por favor, insira um número válido.")
@@ -216,7 +216,7 @@ def aumentaEstoque():
     try:
         qtd = int(input("Quantidade a somar ao estoque atual: "))
         df["Quantidade"] = df["Quantidade"] + qtd
-        df.to_excel(CAMINHO_COMPLETO, index=False)
+        df.to_excel(CAMINHOCOMPLETO, index=False)
         print("Estoque atualizado!")
     except ValueError:
         print("Por favor, insira um número inteiro.")
@@ -229,7 +229,7 @@ def calculaTotal():
     if not verificaArquivo(): return
     df = lerPlanilha("r")
     df["Total"] = df["Quantidade"] * df["Preço"]
-    df.to_excel(CAMINHO_COMPLETO, index=False)
+    df.to_excel(CAMINHOCOMPLETO, index=False)
     print("Coluna 'Total' calculada e salva!")
 # Exercício 13
 # Crie uma função que ordene os produtos pelo preço em ordem decrescente e
@@ -238,7 +238,7 @@ def ordenaPorPreco():
     if not verificaArquivo(): return
     df = lerPlanilha("r")
     df = df.sort_values(by="Preço", ascending=False)
-    df.to_excel(CAMINHO_COMPLETO, index=False)
+    df.to_excel(CAMINHOCOMPLETO, index=False)
     print("Planilha ordenada por preço (Decrescente)!")
 
 # Exercício 14
@@ -277,7 +277,9 @@ def exibeEstatisticas():
 while True:
     
     opcao=input(
-"""   ESCOLHA SUA OPÇÃO:
+"""∷ ∷ ∷ ∷ ∷ ∷ ∷ ∷ ∷ ∷ ∷
+ ESCOLHA SUA OPÇÃO:
+
 1-  GERAR PLANILHA
 2-  LER PLANILHA
 3-  ALTERAR PLANILHA
@@ -302,15 +304,46 @@ while True:
             
         case "2":
             
-            #chama a função
             lerPlanilha("p") 
 
         case "3":
+
             mudaColuna()
         case "4":
+
             alteraCelula()
         case "5":
+
             alteraIntervalo()
+        case "6":
+
+            adicionaColuna()
+        case "7":
+
+            removeColuna()
+        case "8":
+
+            adicionaLinha()
+        case "9":
+
+            removeLinha()
+        case "10":
+            aplicaDesconto()
+
+        case "11":
+            aumentaEstoque()
+
+        case "12":
+            calculaTotal()
+
+        case "13":
+            ordenaPorPreco()
+
+        case "14":
+            filtraValorMinimo()
+
+        case "15":
+            exibeEstatisticas()
 
         case "16":
             input("CLique ENTER para encerrar")
