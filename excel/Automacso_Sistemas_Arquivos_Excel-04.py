@@ -28,48 +28,47 @@ def verificaArquivo():
         return False
     return True
 def criaPlanilha():
-                if not verificaArquivo():
-                    return
-                df = pd.DataFrame(
-                                    {
+    if not verificaArquivo():
+        return
+    df = pd.DataFrame(
+                         {
                             
-                                    "Produto": [
-                                        "Notebook",
-                                        "Mouse",
-                                        "Teclado",
-                                        "Monitor"
-                                    ],
+                         "Produto": [
+                             "Guitarra Tagima Stratocaster",
+                              "BaixoFender squire",
+                            "Teclado Hammond",
+                             "Bateria Perl Export"
+                         ],
                             
-                                    "Quantidade": [
-                                        10,
-                                        35,
-                                        20,
-                                        8
-                                    ],
+                         "Quantidade": [
+                              2,
+                            3,
+                            1,
+                            2
+                        ],
                             
-                                    "Preço": [
-                                        3500,
-                                        80,
-                                        150,
-                                        1200
-                                    ]
+                        "Preço": [
+                            3500,
+                            4500,
+                            8300,
+                            5200
+                        ]
                             
-                                }
-                                )
-                df.to_excel(ARQUIVO, index=False)
+                        }
+                    )
+    df.to_excel(ARQUIVO, index=False)
 
 
 def lerPlanilha(tipo):
-                if not verificaArquivo(): #ver DIRETORIOABSOLUTO / ARQUIVO existe
-                    return
+    if not verificaArquivo(): #ver DIRETORIOABSOLUTO / ARQUIVO existe
+        return
             
-                df=pd.read_excel(ARQUIVO)
-                if tipo == "p":
-
-                    print(f"\n Planilha ({ARQUIVO}) \n")
-                    print(df)
-                elif tipo == "r":
-                    return df
+    df=pd.read_excel(ARQUIVO)
+    if tipo == "p":
+        print(f"\n Planilha ({ARQUIVO}) \n")
+        print(df)
+    elif tipo == "r":
+        return df
                 
 
 while True:
@@ -107,7 +106,7 @@ while True:
                 if not verificaArquivo():
                     return
                 
-                lerPlanilha("p")#opção print
+                #lerPlanilha("p")#opção print
 
                 qualColuna = input("Informe o nome da coluna que queres alterar: ")
                 
@@ -123,7 +122,7 @@ while True:
 
                 df.to_excel(ARQUIVO, index=False)
 
-            print("Coluna alterada com sucesso.")
+                print("Coluna alterada com sucesso.")
 # Exercício 4
 # Crie uma função que permita alterar apenas uma célula específica da planilha,
 # solicitando a linha, a coluna e o novo valor.
