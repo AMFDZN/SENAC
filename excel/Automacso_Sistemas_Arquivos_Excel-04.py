@@ -20,7 +20,7 @@ DIRETORIOABSOLUTO = Path(__file__).resolve().parent
 CAMINHOCOMPLETO = DIRETORIOABSOLUTO / ARQUIVO
 
 
-LINHA="\n- - - - - - - - - - - - -\n"
+LINHA="\n════════════════════\n"
 
 #VERIFICA SE O CAMINHO EXISTE
 def verificaArquivo(avisar=True):
