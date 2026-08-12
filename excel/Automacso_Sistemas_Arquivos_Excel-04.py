@@ -57,7 +57,7 @@ def criaPlanilha():
 
 
 def lerPlanilha(tipo="P"):
-    if not verificaArquivo(): #ver DIRETORIOABSOLUTO / ARQUIVO existe
+    if not verificaArquivo(avisar=True): #ver DIRETORIOABSOLUTO / ARQUIVO existe
         return None
             
     df=pd.read_excel(CAMINHOCOMPLETO)
@@ -74,9 +74,10 @@ def mudaColuna():
                     return
 
                 df=lerPlanilha("r")#opção return
-                LINHA1=df.iloc[0]
+                LINHA1=df.head(1)
+                listaLinha1=list(df.columns)
 
-                qualColuna = input(f"{LINHA1}\nInforme o nome da coluna que queres alterar: ")
+                qualColuna = input(f"{LINHA1}\n{listaLinha1}\nInforme o nome da coluna que queres alterar: ")
                               
 
                 if qualColuna not in df.columns:
@@ -274,12 +275,12 @@ def exibeEstatisticas():
     print(f"Total de Itens no Estoque: {df['Quantidade'].sum()} unidades") #DataFrame.Coluna.soma
     print(f"Desvio Padrão dos Preços: R$ {np.std(df['Preço']):.2f}")
     print(f"{LINHA}")
+
 while True:
     
     opcao=input(
-"""∷ ∷ ∷ ∷ ∷ ∷ ∷ ∷ ∷ ∷ ∷
+"""----------------
  ESCOLHA SUA OPÇÃO:
-
 1-  GERAR PLANILHA
 2-  LER PLANILHA
 3-  ALTERAR PLANILHA
@@ -295,7 +296,9 @@ while True:
 13- ORDENAR PRODUTOS PELO PREÇO
 14- MOSTRAR PRODUTOS A PARTIR DE UM VALOR MÍNIMO
 15- ESTATÍSTICAS
-""")
+16- ENCERRAR
+---------------------
+Opção nº: """)
 
     match opcao:
         case "1":
@@ -346,7 +349,8 @@ while True:
             exibeEstatisticas()
 
         case "16":
-            input("CLique ENTER para encerrar")
+            print("Encerrando o programa... Até logo!")
+            break
         
         case _:
             print("Opão errada")
