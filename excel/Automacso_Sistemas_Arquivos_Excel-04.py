@@ -22,8 +22,6 @@ CAMINHOARQUIVO= Path(DIRETORIORAIZ) #caminho até o arquivo para a mopção de u
 
 DIRETORIOEXERCICIO = Path(__file__).resolve().parent #pasta do exercício [excel]
 CAMINHOCOMPLETO = DIRETORIOEXERCICIO / ARQUIVO
-print(f"printando caminho2\n{CAMINHOCOMPLETO}")
-print(f"printando caminho1\n{CAMINHOARQUIVO}")
 
 #decorativos
 LINHA="\n══════════════════════════\n" 
