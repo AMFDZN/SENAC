@@ -125,7 +125,16 @@ def abrePlanilha(tipo="r"):
 # Crie uma função que permita visualizar todos os dados armazenados em uma aba 
 # da planilha. 
 
-def mostraPlanilha(mostraValores=False):
+def mostraPlanilha(mostraValores=False,qualAba=False):
+    
+    if not qualAba:
+        qualAba="active" #se nã declrada assume que é a página ativa
+    elif qualAba.strip().isdigit(): #se for um número, transforma para int
+        qualAba = int(qualAba)
+    else:
+        qualAba=qualAba.strip() #limpa espaços
+        qualAba="title" #considera ser o título da página
+    
     """
     mostraValores : tipo booleano | True : mostra as linhas e valores da tabela, False : mostra as abas
 iter_rows() # Percorre todas as linhas da planilha.
@@ -144,14 +153,16 @@ values_only=True #tipo booleano - default: False - True Retorna os valores das c
     
     if planilha is None: return
     
-    # a tal aba
-    pagina = planilha.active   
+    # a aba atual
+    aba = planilha.active   
     
     if mostraValores:
         print(f" - - - PLANILHA - - - \n")
-        # usando a biblioteca padrão OpenPyXL
-        # for linha in pagina.iter_rows(values_only=True):
+        # trecho abaixo com a biblioteca padrão OpenPyXL
+        #
+        # for linha in aba.iter_rows(values_only=True):
         #     print(linha)
+        #
         #########################
         """
         como sou um cara do front-end + UI/UX,
@@ -159,10 +170,11 @@ values_only=True #tipo booleano - default: False - True Retorna os valores das c
         e usei a biblioteca "tabulate"
         com uma opção que não usa emojis 😂
         usa os caracteres de cálculo ( - + = ) e o "palito" ( | )
-        e tem funções de tabulação dos dados mais "amigas"
+        para formar um desenho de tabela,
+        e tem funções de tabulação de dados mais "amigas"
         """
         #cria uma lista com os dados da página
-        listaDados = list(pagina.iter_rows(values_only=True))
+        listaDados = list(aba.iter_rows(values_only=True))
         #separa o acabeçalho do resto
         cabecalho = listaDados[0] #a linha índice [0]
         linhas = listaDados[1:] #demais linhas
@@ -171,8 +183,8 @@ values_only=True #tipo booleano - default: False - True Retorna os valores das c
     else:
         print(f"\n - - - ABAS DA PLANILHA {NOMEDOARQUIVO} - - - \n")
         i=0 #escalando para quando tiver mais abas
-        for pagina in planilha.sheetnames:
-            print(f"Página Nª{i}: {pagina}")
+        for aba in planilha.sheetnames:
+            print(f"Aba Nª{i}: {aba}")
             i+=1
 
  
@@ -198,15 +210,15 @@ def acaoNaCelula(oq="ler"):
          
     if planilha is None: return
     
-    pagina = planilha.active
+    aba = planilha.active
     
     if oq.lower()=="mudar":
     
         qualCelula = input("Informe a célula que você quer mudar o valor (ex.: A3): ")
-        valorAtual=pagina[qualCelula].value
+        valorAtual=aba[qualCelula].value
         print(f"{LINHAZINHA}\nValor atual da Célula [{qualCelula}] = [{valorAtual}]")
         valorDaCelula = input(f"Novo valor para a célula {qualCelula}: ")
-        pagina[qualCelula] = valorDaCelula #declara novo valor à célula selecionada
+        aba[qualCelula] = valorDaCelula #declara novo valor à célula selecionada
         planilha.save(ARQUIVO) #salva
         
         print(f"{OK} Célula alterada com sucesso.")
@@ -214,7 +226,7 @@ def acaoNaCelula(oq="ler"):
     
     elif oq.lower()=="ler":
         qualCelula = input("Informe a célula (ex.: A1, B3...): ")
-        valorDaCelula = pagina[qualCelula].value
+        valorDaCelula = aba[qualCelula].value
         
         print("\nCélula encontrada.")
         print(f"Célula [{qualCelula}] = [{valorDaCelula}]")
@@ -224,7 +236,7 @@ def acaoNaCelula(oq="ler"):
             qualCelula = input("Informe uma célula aleatória (ex.: A15, D10...): ")
             valorDaCelula = input(f"Qual o valor para a célula {qualCelula}: ")
             
-            pagina[qualCelula] = valorDaCelula #declara novo valor à célula selecionada
+            aba[qualCelula] = valorDaCelula #declara novo valor à célula selecionada
             planilha.save(ARQUIVO) #salva
         
             print(f"{OK} Valor inserido na célula com sucesso.")
@@ -240,7 +252,7 @@ def adicionarLinha():
     
     if planilha is None: return
     
-    pagina = planilha.active
+    aba = planilha.active
     
     
     produto = input("Nome do produto: ")
@@ -248,7 +260,7 @@ def adicionarLinha():
     preco = float(input("Preço unitário: "))
     estado = input("Estado de conservação: (novo/usado)")
     
-    pagina.append([produto,quantidade,preco,estado])
+    aba.append([produto,quantidade,preco,estado])
     
 
     planilha.save(ARQUIVO)
@@ -268,10 +280,10 @@ def adicionarLinha2(oq="produto"):
     planilha = abrePlanilha()
     if planilha is None: return
     
-    pagina = planilha.active
+    aba = planilha.active
 
     # Extrair os cabeçalhos da primeira linha, para saber o nome da coluna, pra pedir ao usuário dado por dado
-    cabecalhos = [cell.value for cell in pagina[1] if cell.value is not None]
+    cabecalhos = [cell.value for cell in aba[1] if cell.value is not None]
     
     if not cabecalhos:
         print("A planilha está vazia ou não possui cabeçalhos na primeira linha.")
@@ -279,8 +291,8 @@ def adicionarLinha2(oq="produto"):
 
     # Identifica os tipos de dados baseados na segunda linha (se existir dado prévio)
     tipos = []
-    if pagina.max_row >= 2: #max_row é top! exatamente para buscas deste tipo, ou buscas binárias, por eliminação, para encontrar um valor aleatório numa tabela imensa
-        for cell in pagina[2]: #usa a primeira linha com valores, na qual provavelmente foi inserido o tipo correto de valor
+    if aba.max_row >= 2: #max_row é top! exatamente para buscas deste tipo, ou buscas binárias, por eliminação, para encontrar um valor aleatório numa tabela imensa
+        for cell in aba[2]: #usa a primeira linha com valores, na qual provavelmente foi inserido o tipo correto de valor
             val = cell.value #caminha por cada célula
             #isisntance reconhecendo o tipo. Classe type
             if isinstance(val, bool): #é booleano?
@@ -322,7 +334,7 @@ def adicionarLinha2(oq="produto"):
                 print(f"{ERRO} Entrada inválida! Digite um valor do tipo {tipo.__name__}.")
 
     # Adiciona a nova linha e salva a planilha
-    pagina.append(novaLinha)
+    aba.append(novaLinha)
     planilha.save(ARQUIVO)
     print(f"\n{OK} Adicionamos {oq} com sucesso!")
     
@@ -349,17 +361,17 @@ def removeLinha():
     planilha = abrePlanilha()
     if planilha is None: return
     
-    pagina = planilha.active
+    aba = planilha.active
 
 
-    linha = int(input(f"Informe o número da linha que deseja remover (de 2 a {pagina.max_row}): "))
+    linha = int(input(f"Informe o número da linha que deseja remover (de 2 a {aba.max_row}): "))
 
 
-    if linha <= 1 or linha > pagina.max_row: #a linha é a do cabeçalho? ou é uma linha além do máximo de linhas desta página
+    if linha <= 1 or linha > aba.max_row: #a linha é a do cabeçalho? ou é uma linha além do máximo de linhas desta página
         print(f"{ERRO} A linha {linha} não é válida para remoção!")
         return
 
-    pagina.delete_rows(linha) # delete_rows(idx da linha) deleta uma linha específica
+    aba.delete_rows(linha) # delete_rows(idx da linha) deleta uma linha específica
     planilha.save(ARQUIVO)
 
     print(f"{OK} Linha {linha} removida com sucesso.")
@@ -378,11 +390,11 @@ def adicionaColuna():
     planilha = abrePlanilha()
     if planilha is None: return
 
-    pagina = planilha.active
+    aba = planilha.active
 
-    qualColuna = int(input(f"Informe a posição da coluna (após a coluna ID:{pagina.max_column}): "))
-    if qualColuna >= pagina.max_column:
-        pagina.insert_cols(qualColuna)
+    qualColuna = int(input(f"Informe a posição da coluna (após a coluna ID:{aba.max_column}): "))
+    if qualColuna >= aba.max_column:
+        aba.insert_cols(qualColuna)
     else:
         print(f"A coluna ID:{qualColuna} está sendo usada")
         return
@@ -391,21 +403,26 @@ def adicionaColuna():
     titulo = input("Digite o título da nova coluna: ")
 
     #.cell(em qual linha,índice da célula na linha).value = valor da célula
-    pagina.cell(row=1,column=qualColuna).value = titulo
+    aba.cell(row=1,column=qualColuna).value = titulo
 
     planilha.save(ARQUIVO)
 
     print(f"A coluna {titulo} foi adicionada com sucesso.")
     #mostra para o usuário a tabela com a coluna nova. O cabeçalho e a primeira linha
-    cabecalhos = [cell.value for cell in pagina[1] if cell.value is not None]
-    linha1 = [cell.value for cell in pagina[2] if cell.value is not None]
+    cabecalhos = [cell.value for cell in aba[1] if cell.value is not None]
+    linha1 = [cell.value for cell in aba[2] if cell.value is not None]
     print(tabulate([linha1], headers=cabecalhos, tablefmt="grid"))
-    
 
-print("FDP -(*&¨9876987¨897***5$##3#3#3768$%$76%86(876(*5323#8)))")
-print("Tinha feito TOOOOOOOODDDDDDDDDDDDDDDDDDDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-print("O Git desconfigurou e ME pediu um pull antes do push e perdo TUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUDO")
-print("Desisti - ")
+    
+print("TINHA FEITO ESTE E MAIS OUTROS\nEXERCÍCIOS INCOMPLETOS SOMENTE LOCALMENTE")
+print(f"\n{LINHA}\nO Git desconfigurou a autenticação\nDepois de reconfigurar e autenticar\nme pediu um pull antes do push\ne, lógico, me trouxe os arquivos incompletos\nE perdi o trabalho sestes dias.")
+print(f"\n{ERRO} ontem eu havia \"desistido\", mas hoje resolvi refazê-los:")
+print("""\n
+█   █  ███  █   █    ████  █████ █████  ███  █████ █████ ████  
+█   █ █   █ █   █    █   █ █     █     █   █    █  █     █   █ 
+█   █ █   █ █   █    ████  ████  ████  █████   █   ████  ████  
+ █ █  █   █ █   █    █  █  █     █     █   █  █    █     █  █  
+  █    ███   ███     █   █ █████ █     █   █ █████ █████ █   █ """)
  
 # Exercício 12 
 # Crie uma função que permita remover uma coluna existente na planilha. 
