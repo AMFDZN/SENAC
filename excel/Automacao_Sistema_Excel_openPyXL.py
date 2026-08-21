@@ -170,9 +170,9 @@ values_only=True #tipo booleano - default: False - True Retorna os valores das c
         print(tabulate(linhas, headers=cabecalho, tablefmt="grid"))
     else:
         print(f"\n - - - ABAS DA PLANILHA {NOMEDOARQUIVO} - - - \n")
-        i=1 #escalando para quando tiver mais abas
+        i=0 #escalando para quando tiver mais abas
         for pagina in planilha.sheetnames:
-            print(f"Página {i}: {pagina}")
+            print(f"Página Nª{i}: {pagina}")
             i+=1
 
  
@@ -402,6 +402,10 @@ def adicionaColuna():
     print(tabulate([linha1], headers=cabecalhos, tablefmt="grid"))
     
 
+print("FDP -(*&¨9876987¨897***5$##3#3#3768$%$76%86(876(*5323#8)))")
+print("Tinha feito TOOOOOOOODDDDDDDDDDDDDDDDDDDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+print("O Git desconfigurou e ME pediu um pull antes do push e perdo TUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUDO")
+print("Desisti - ")
  
 # Exercício 12 
 # Crie uma função que permita remover uma coluna existente na planilha. 
