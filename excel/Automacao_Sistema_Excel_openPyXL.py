@@ -72,12 +72,12 @@ def criaPlanilha():
                 return
         planilha = Workbook()
         
-        # a variável (aba) é a página da planilha
+        # a variável (aba) é a aba da planilha
         # em que se está trabalhando
     
         aba = planilha.active # .active é uma propriedade para "ativar" a aba da planilá
     
-        aba.title = "Produtos" # define o nome da página da planilha
+        aba.title = "Produtos" # define o nome da aba da planilha
     
     
         aba["A1"] = "Nome do Produto"
@@ -105,7 +105,7 @@ def criaPlanilha():
 # operações do programa utilizem esse arquivo.
 
 def abrePlanilha(tipo="r"):
-    if not verificaArquivo(avisar=False):
+    if not verificaArquivo(avisar=True):
         return None
     
     planilha = load_workbook(ARQUIVO) #carrega a planilha e deixa pronta pro jogo
@@ -125,16 +125,44 @@ def abrePlanilha(tipo="r"):
 # Crie uma função que permita visualizar todos os dados armazenados em uma aba 
 # da planilha. 
 
-def mostraPlanilha(mostraValores=False,qualAba=False):
+def mostraPlanilha(mostraValores=False,qualAba=False,top=False):
+    planilha = abrePlanilha()
+    if planilha is None: return
     
-    if not qualAba:
-        qualAba="active" #se nã declrada assume que é a página ativa
-    elif qualAba.strip().isdigit(): #se for um número, transforma para int
-        qualAba = int(qualAba)
+    """USANDO:
+    
+    1. LISTAR ABAS:
+       mostraPlanilha(mostraValores=False)
+       ou simplesmente: mostraPlanilha()
+       -> mostraValores=False mostra as abas da planilha, em forma de linhas, 
+          com índice e título em cada linha.
+    
+    2. VER A ABA INTEIRA:
+       mostraPlanilha(mostraValores=True, qualAba="Produtos")
+       OU usando o índice numérico: mostraPlanilha(mostraValores=True, qualAba=0)
+       
+    3. MOSTRAR ANTES E DEPOIS DE EXECUTAR ALGUM EXERCÍCIO (VISÃO RÁPIDA):
+       mostraPlanilha(mostraValores=True, qualAba="Produtos", top=True)
+       
+    DETALHES DOS PARÂMETROS:
+    - O valor default de todos os parâmetros é False, para que quando omitido ou vazio funcione.
+    - qualAba aceita: o número do índice (int) ou o "nome da aba" (str).
+    - top=True mostra apenas a primeira linha (ideal para conferir antes/depois de ações em colunas/linhas).
+    """
+       
+    #############################
+    # --- qual aba ---
+    if qualAba is False or qualAba is None:
+        aba = planilha.active
+    elif isinstance(qualAba, int):
+        aba = planilha.worksheets[qualAba]
+    elif str(qualAba).strip().isdigit():
+        numeroDaAba = int(str(qualAba).strip())
+        aba = planilha.worksheets[numeroDaAba]
     else:
-        qualAba=qualAba.strip() #limpa espaços
-        qualAba="title" #considera ser o título da página
-    
+        tituloDaAba = str(qualAba).strip()
+        aba = planilha[tituloDaAba]
+    #############################
     """
     mostraValores : tipo booleano | True : mostra as linhas e valores da tabela, False : mostra as abas
 iter_rows() # Percorre todas as linhas da planilha.
@@ -149,15 +177,10 @@ values_only=True #tipo booleano - default: False - True Retorna os valores das c
 
     """
 
-    planilha = abrePlanilha()
-    
-    if planilha is None: return
-    
-    # a aba atual
-    aba = planilha.active   
+     
     
     if mostraValores:
-        print(f" - - - PLANILHA - - - \n")
+        #print(f" - - - PLANILHA - - - \n{planilha.title} Aba {aba.title}")
         # trecho abaixo com a biblioteca padrão OpenPyXL
         #
         # for linha in aba.iter_rows(values_only=True):
@@ -173,24 +196,67 @@ values_only=True #tipo booleano - default: False - True Retorna os valores das c
         para formar um desenho de tabela,
         e tem funções de tabulação de dados mais "amigas"
         """
-        #cria uma lista com os dados da página
+        #cria uma lista com os dados da aba
         listaDados = list(aba.iter_rows(values_only=True))
+        if not listaDados:
+            print(f"{ATENCAO} A aba '{aba.title}' está vazia.")
+            return
+
         #separa o acabeçalho do resto
         cabecalho = listaDados[0] #a linha índice [0]
-        linhas = listaDados[1:] #demais linhas
-        #biblioteca tabulate - formatação "grid" (tablefmt="grid")
-        print(tabulate(linhas, headers=cabecalho, tablefmt="grid"))
+        
+        #o que mostrar
+        if top:
+            # Mostra o cabeçalho e apenas a primeira linha de dados (útil para antes/depois de ações)
+            linhas = listaDados[1:2] if len(listaDados) > 1 else []
+            print(f"--- [Visualização Rápida] Aba: {aba.title} ---")
+            print(tabulate(linhas, headers=cabecalho, tablefmt="grid"))
+        else:
+            # Mostra a tabela inteira
+            print(f"\n[{NOMEDOARQUIVO}] Aba: {aba.title}")
+            print(tabulate(listaDados[1:], headers=cabecalho, tablefmt="grid"))
     else:
-        print(f"\n - - - ABAS DA PLANILHA {NOMEDOARQUIVO} - - - \n")
+        print(f"\nABAS DA PLANILHA {NOMEDOARQUIVO}\n")
         i=0 #escalando para quando tiver mais abas
         for aba in planilha.sheetnames:
-            print(f"Aba Nª{i}: {aba}")
+            print(f"{LI} Aba Nª{i}: {aba}")
             i+=1
 
  
 
+def mostraPlanilha2(mostraValores=False, qualAba=False, top=False):
+    
+    planilha = abrePlanilha()
+    
+    # Seleção da aba
+    if qualAba is False or qualAba is None:
+        aba = planilha.active
+    elif isinstance(qualAba, int):
+        aba = planilha.worksheets[qualAba]
+    else:
+        aba = planilha[str(qualAba).strip()]
 
- 
+    # Exibição dos dados ou das abas
+    if mostraValores:
+        listaDados = list(aba.iter_rows(values_only=True))
+        if not listaDados:
+            print(f"{ATENCAO} A aba '{aba.title}' está vazia.")
+            return
+
+        cabecalho = listaDados[0]
+        
+        if top:
+            linhas = listaDados[1:2] if len(listaDados) > 1 else []
+            print(f"\n[Visualizar Alteração] Aba: {aba.title}")
+            print(tabulate(linhas, headers=cabecalho, tablefmt="grid"))
+        else:
+            print(f"\n[{NOMEDOARQUIVO}] Aba: {aba.title}")
+            print(tabulate(listaDados[1:], headers=cabecalho, tablefmt="grid"))
+    else:
+        print(f"{LINHAZINHA}\nABAS DA PLANILHA {NOMEDOARQUIVO}")
+        for i, tituloAba in enumerate(planilha.sheetnames):
+            print(f"{LI} Aba Nº{i}: {tituloAba}")
+            
 # Exercício 6 
 # Crie uma função que permita inserir um valor em uma célula específica da 
 # planilha. 
@@ -254,7 +320,10 @@ def adicionarLinha():
     
     aba = planilha.active
     
-    
+    ## aqui só acontece porque eu sei o que tem na planilha
+    # neste momento.se retirar uma coluna, inserir couna, ou mudar seu nome ou posição,
+    # antes de fazer este exercício,
+    # tudo pára
     produto = input("Nome do produto: ")
     quantidade = int(input("Quantidade em estoque: "))
     preco = float(input("Preço unitário: "))
@@ -367,7 +436,7 @@ def removeLinha():
     linha = int(input(f"Informe o número da linha que deseja remover (de 2 a {aba.max_row}): "))
 
 
-    if linha <= 1 or linha > aba.max_row: #a linha é a do cabeçalho? ou é uma linha além do máximo de linhas desta página
+    if linha <= 1 or linha > aba.max_row: #a linha é a do cabeçalho? ou é uma linha além do máximo de linhas desta aba
         print(f"{ERRO} A linha {linha} não é válida para remoção!")
         return
 
@@ -380,62 +449,182 @@ def removeLinha():
 # Crie uma função que permita adicionar uma nova coluna na planilha. 
 # O usuário deverá informar o nome da nova coluna e os valores que serão 
 # inseridos. 
-def adicionaColuna():
-    """
-        insert_cols() - parâmetros | (idx:numero[i] da coluna, amount:quantas colunas)
-            sem parâmetro idx Insere colunas vazias logo depois da última.
 
+# Exercício 12 
+# Crie uma função que permita remover uma coluna existente na planilha. 
+
+def acaoNaColuna(oq=None):
+    
     """
+    parâmetro oq - define a ação
+        insert_cols(i) e delete_cols(i) - parâmetros | (idx:numero[i] da coluna, amount:quantas colunas)
+            Insere: coluna vazia logo depois da última.
+            Delete: a coluna referente ao índice informado
+    """
+    if oq:
+        oq = oq.strip().lower()
+
+    # Loop para validar a ação (evita a execução múltipla da recursão)
+    while not oq or oq.isdigit() or (oq != "del" and oq != "add" and oq!="nome"):
+        oq = input(f"""\n{ATENCAO} Informe uma das duas ações que será feita em uma das colunas:
+            {LI}  add = Adicionar uma coluna
+            {LI}  del = Deletar uma coluna
+            {LI}  nome = Muda nome de uma coluna
+            {LI} """
+        ).strip().lower()
 
     planilha = abrePlanilha()
     if planilha is None: return
-
-    aba = planilha.active
-
-    qualColuna = int(input(f"Informe a posição da coluna (após a coluna ID:{aba.max_column}): "))
-    if qualColuna >= aba.max_column:
-        aba.insert_cols(qualColuna)
-    else:
-        print(f"A coluna ID:{qualColuna} está sendo usada")
-        return
-
-
-    titulo = input("Digite o título da nova coluna: ")
-
-    #.cell(em qual linha,índice da célula na linha).value = valor da célula
-    aba.cell(row=1,column=qualColuna).value = titulo
-
-    planilha.save(ARQUIVO)
-
-    print(f"A coluna {titulo} foi adicionada com sucesso.")
-    #mostra para o usuário a tabela com a coluna nova. O cabeçalho e a primeira linha
-    cabecalhos = [cell.value for cell in aba[1] if cell.value is not None]
-    linha1 = [cell.value for cell in aba[2] if cell.value is not None]
-    print(tabulate([linha1], headers=cabecalhos, tablefmt="grid"))
-
     
-print("TINHA FEITO ESTE E MAIS OUTROS\nEXERCÍCIOS INCOMPLETOS SOMENTE LOCALMENTE")
-print(f"\n{LINHA}\nO Git desconfigurou a autenticação\nDepois de reconfigurar e autenticar\nme pediu um pull antes do push\ne, lógico, me trouxe os arquivos incompletos\nE perdi o trabalho sestes dias.")
-print(f"\n{ERRO} ontem eu havia \"desistido\", mas hoje resolvi refazê-los:")
-print("""\n
-█   █  ███  █   █    ████  █████ █████  ███  █████ █████ ████  
-█   █ █   █ █   █    █   █ █     █     █   █    █  █     █   █ 
-█   █ █   █ █   █    ████  ████  ████  █████   █   ████  ████  
- █ █  █   █ █   █    █  █  █     █     █   █  █    █     █  █  
-  █    ███   ███     █   █ █████ █     █   █ █████ █████ █   █ """)
+    aba = planilha.active
+    
+    if oq=="add":
+        mostraPlanilha(mostraValores=True,qualAba=False,top=True)
+        qualColuna = int(input(f"Informe a posição da coluna (após a coluna Nº{aba.max_column}): "))
+        if qualColuna >= aba.max_column:
+            aba.insert_cols(qualColuna)
+        else:
+            print(f"A coluna ID:{qualColuna} está sendo usada")
+            return
+
+
+        titulo = input("Digite o título da nova coluna: ")
+
+        #.cell(em qual linha,índice da célula na linha).value = valor da célula
+        aba.cell(row=1,column=qualColuna).value = titulo
+
+        planilha.save(ARQUIVO)
+
+        print(f"A coluna {titulo} foi adicionada com sucesso.")
+        mostraPlanilha(mostraValores=True,qualAba=False,top=True)
+    
+    if oq=="del":
+        mostraPlanilha(mostraValores=True,qualAba=False,top=True)
+        qualColuna = int(input(f"Informe o número da coluna a deletar (entre 1 e {planilha.max_column}): "))
+        
+        if qualColuna < 1 or qualColuna > aba.max_column:
+            print(f"A coluna {qualColuna} não está em uso.")
+        
+            return
+        
+        
+        
+        aba.delete_cols(qualColuna)
+        planilha.save(ARQUIVO)        
+        
+        print(f"Coluna {qualColuna} removida com sucesso.")
+        mostraPlanilha(mostraValores=True,qualAba=False,top=True)
+        
+    #mostra para o usuário a tabela com a coluna nova. O cabeçalho e a primeira linha
+    # cabecalhos = [cell.value for cell in aba[1] if cell.value is not None]
+    # linha1 = [cell.value for cell in aba[2] if cell.value is not None]
+    # print(tabulate([linha1], headers=cabecalhos, tablefmt="grid"))
+        mostraPlanilha(mostraValores=True,qualAba=0,top=True)
+
  
-# Exercício 12 
-# Crie uma função que permita remover uma coluna existente na planilha. 
  
 # Exercício 13 
 # Crie uma função que permita criar uma nova aba dentro do arquivo Excel. 
 # A nova aba deverá possuir um nome informado pelo usuário. 
- 
+
 # Exercício 14 
 # Crie uma função que permita alterar o nome de uma aba existente. 
  
 # Exercício 15 
 # Crie uma função que permita excluir uma aba existente no arquivo Excel. 
+
+def acaoNaAba(oq="ver"):
+    if oq:
+        oq = oq.strip().lower()
+    
+    while not oq or oq.isdigit() or (oq not in ["ver", "list", "add", "del","nome"]):
+        oq = input(f"""
+            \n{ATENCAO} Informe uma das ações disponíveis para as abas:
+            {LI} ver = Visualizar uma aba
+            {LI} list = Listar todas as abas
+            {LI} add = Adicionar uma aba
+            {LI} del = Deletar uma aba
+            {LI} nome = Mudar o nome de uma aba
+            {LI} """
+        ).strip().lower()
+    
+    planilha = abrePlanilha()
+    if planilha is None: return
+
+    # ADICIONAR UMA ABA (ABA)
+    if oq == "add":
+        nomeDaAba = input(f"Escolha um Título para a nova aba na planilha \"{NOMEDOARQUIVO}\":\n").strip()
+
+        if nomeDaAba in planilha.sheetnames:
+            print(f"\n{ATENCAO} A aba '{nomeDaAba}' já existe na planilha.")
+            return
+        
+        planilha.create_sheet(nomeDaAba)
+        planilha.save(ARQUIVO)
+        print(f"\n{OK} Aba '{nomeDaAba}' criada com sucesso.")
+        mostraPlanilha()
+
+    # DELETAR ABA
+    elif oq == "del":
+        mostraPlanilha(mostraValores=False)
+        
+        try:
+            if len(planilha.worksheets)<=1:
+                print(f"{ATENCAO} Como a quantidade de abas é {len(planilha.worksheets)},\nnão é possível apagar a única aba.")
+                criarAgora=input(f"{LI} Quer criar uma nova Aba agora?\n{LI} (s/n): ").strip()
+                if criarAgora.lower()=="s":
+                    acaoNaAba("add")
+                else:
+                    return
+                
+            qualAba = int(input(f"{LI} Qual o Nº(número) da aba, exceto a de Nº0, que deseja remover? "))
+            #indice_python = qualAba - 1
+
+            # Valida o índice de acordo com a lista de abas=worksheets
+            if qualAba <= 0 or qualAba >= len(planilha.worksheets):
+                print(f"\n{ATENCAO} A aba com Nº:{qualAba} não pode ser removida!")
+                return
+
+            # Seleciona a aba pelo índice do objeto
+            aba = planilha.worksheets[qualAba]
+            
+            planilha.remove(aba)
+            planilha.save(ARQUIVO)
+            print(f"\n{OK} A aba Nº{qualAba} - '{aba.title}'foi removida!")
+            mostraPlanilha(mostraValores=False)
+
+        except ValueError:
+            print(f"\n{ERRO} Digite um NÚMERO INTEIRO válido para o Nº da aba.")
+            return
+    
+    #MUDAR O NOME DE UMA ABA
+    
+    elif oq=="nome":
+        mostraPlanilha()
+        
+        qualAba = input(f"{LINHAZINHA}\nEscolha o Nº da aba a ser renomeada.\n{LI} ")
+        
+        if qualAba < 0 or qualAba >= len(planilha.worksheets):
+            print(f"\n{ATENCAO} A aba com ID:{qualAba} não existe!")
+            return
+        
+            # if qualAba not in planilha.sheetnames:
+            #     print("Aba inexistente.")
+            #     return
+        
+        aba = planilha.worksheets[qualAba]
+        
+        nomeNovo = input(f"Informe o novo nome para a aba Nº{qualAba} | Nome: {aba.title}: ")
+        
+        planilha[qualAba].title = nomeNovo
+        planilha.save(ARQUIVO)
+        
+        print(f"{OK} A aba Nº{qualAba}:{aba.title} foi renomeada para {nomeNovo} com sucesso.")
+    
+    # LISTAR OU VISUALIZAR
+    elif oq in ["ver", "list"]:
+        mostraPlanilha(mostraValores=(oq == "ver")) 
+
  
 # Exercício 16 
 # Crie uma função que calcule automaticamente o valor total de cada produto. 
@@ -518,76 +707,168 @@ while True:
 25 - GERAR UM GRÁFICO
 26 - GERAR UM RELATÓRIO
      E UMA PILHA DE COISAS
+27 - FINALIZAR
 {LINHAZINHA}
 {LI} ESCOLHA UMA OPÇÃO: """)
     match opcao:
         case "1":
             
-            print(f"\nCRIANDO O ARQUIVO {NOMEDOARQUIVO}")
+            print(f"{LINHA}\nCRIANDO O ARQUIVO {NOMEDOARQUIVO}")
             criaPlanilha()
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
             
         case "2":
             
-            print(F"\nVERIFICANDO SE O ARQUIVO {NOMEDOARQUIVO} EXISTE:\n")
+            print(F"{LINHA}\nVERIFICANDO SE O ARQUIVO {NOMEDOARQUIVO} EXISTE")
             verificaArquivo(avisar=True) 
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
             
         case "3":
             
-            print("\nABRINDO A PLANILHA PARA INICIAR OS TESTES:")
+            print(f"{LINHA}\nABRINDO A PLANILHA PARA INICIAR OS TESTES:")
             abrePlanilha("p")
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
         
         case "4":
             
-            print("\nLISTANDO AS ABAS DA PLANILHA:")
-            mostraPlanilha(mostraValores=False)
+            print(f"{LINHA}\nLISTANDO AS ABAS DA PLANILHA\n{NOMEDOARQUIVO}")
+            mostraPlanilha()
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
             
         case "5":
             
-            print("\nLISTANDO A PLANILHA:")
+            print(f"{LINHA}\nLISTANDO A PLANILHA {NOMEDOARQUIVO}")
             mostraPlanilha(mostraValores=True)
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
             
         case "6":
             
-            print("\nINSERIR UM VALOR EM UMA CÉLULA:")
+            print(f"{LINHA}\nINSERIR UM VALOR EM UMA CÉLULA:")
             acaoNaCelula(oq="mudar")
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
             
         case "7":
                     
-            print("\nVER O CONTEÚDO DE UMA CÉLULA:")
+            print(f"{LINHA}\nVER O CONTEÚDO DE UMA CÉLULA:")
             acaoNaCelula(oq="ler")
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
         
         case "8":
                             
-            print("\nMUDAR O CONTEÚDO DE UMA CÉLULA:")
+            print(f"{LINHA}\nMUDAR O CONTEÚDO DE UMA CÉLULA:")
             acaoNaCelula(oq="mudar")
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
                 
         case "9":
             
-            print("VAMOS INSERIR UM PRODUTO NA PLANILHA")
+            print(f"{LINHA}\n'INSERIR UM PRODUTO NA PLANILHA")
             adicionarLinha2("produto")
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
             
         case "10":
             
-            print("VAMOS REMOVER UMA LINHA")
+            print(f"{LINHA}\nVAMOS REMOVER UMA LINHA DA TABELA")
             removeLinha()
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
             
         case "11":
             
-            print("VAMOS INSERIR UMA LINHA NA PLANILHA")
+            print(f"{LINHA}\nVAMOS INSERIR UMA LINHA NA TABELA")
             adicionarLinha2("linha")
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
             
-        case "13":
-            print("VAMOS ADICIONAR UMA NOVA COLUNA NA TABELA\n")
-            adicionaColuna()
+        case "12":
+            print(f"{LINHA}\nVAMOS REMOVER UMA COLUNA DA TABELA")
+            acaoNaColuna("del")
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
+            
+        case "13":
+            print(f"{LINHA}\nVAMOS ADICIONAR UMA NOVA COLUNA NA TABELA")
+            acaoNaColuna("add")
+            input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
+        
+        case "14":
+            
+            print(f"{LINHA}\nINSERIR NOVA ABA NA PLANILHA")
+            acaoNaAba(oq="add")
+            input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
+            
+        case "15":
+            
+            print(f"{LINHA}\nMUDAR DE NOME UMA ABA DA PLANILHA")
+            acaoNaAba(oq="nome")
+            input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            
+        case "16":
+            
+            print(f"{LINHA}\nEXCLUIR UMA ABA DA PLANILHA")
+            acaoNaAba(oq="del")
+            input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            
+        case "17":
+            
+            print("{LINHA}\nCALCULAR O VALOR TOTAL DE CADA PRODUTO")
+            #valorTotalProduto(quant="1")
+            input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            
+        case "18":
+            
+            print(f"{LINHA}\nFORMATAR O CABEÇALHO DA TABELA\n")
+            #formatarTabela(oq="top")
+            input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            
+        case "19":
+            
+            print("APLICAR BORDAS À TABELA\n")
+            #formatarTabela(oq="bordas")
+            input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+                    
+        case "20":
+            
+                print("AJUSTAR O TAMANHO DAS COLUNAS NA TABELA\n")
+                #formatarTabela(oq="colunas")
+                input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+                                                
+        case "21":
+            
+                print("MESCLAR CÉLULAS DA TABELA\n")
+                #formatarTabela(oq="top", case="2")
+                input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            
+        case "22":
+            
+                print("OCULTAR O CABEÇALHO DA TABELA\n")
+                #formatarTabela(oq="top", case="2")
+                input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            
+        case "23":                                    
+            
+                print("APLICAR FILTROS NA TABELA\n")
+                #formatarTabela(oq="filtros")
+                input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            
+        case "24":
+            
+                print("TRANSFORMAR DADOS EM UMA PLANILHA\n")
+                criaPlanilha(oq="nova")
+                input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            
+        case "25":                        
+            
+                print("VAMOS GERAR UM GRÁFICO DA TABELA\n")
+                #geraGrafico(aba="0",tipo="barras")
+                input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            
+        case "26":
+            
+                print("VAMOS GERAR UM RELATÓRIO(DASHBOARD) DA TABELA\n")
+                #geraDashboard(aba=0,tipo="1")
+                input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            
+        case "27":
+            #finalizar o while
+            break
+        
+        case _:
+            #se deu mal. ficou preso no while
+            input(F"NÃO EXISTE ESTA OPÇÃO\n{LI} Use ENTER PARA RETOMAR")                        
