@@ -1,0 +1,9 @@
+#arquivos d teste e log
+*.xslx
+*.txt
+*.log
+#pastas de cobfig
+.venv/
+.vscode/
+#pastas do de cache do python3, no linux
+/_pycache_/
