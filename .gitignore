@@ -6,5 +6,5 @@
 .venv/
 .vscode/
 #pastas do de cache do python3, no linux
-/_pycache_/
+*_pycache_
 *.zip
