@@ -2,12 +2,13 @@
 
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
-from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.chart import BarChart, Reference
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.comments import Comment
 from openpyxl import load_workbook
 from tabulate import tabulate
+import re #regex para filtrar as entradas usando letras e números 
 import os
 from pathlib import Path
 
@@ -64,28 +65,30 @@ def verificaArquivo(avisar=True):
 def criaPlanilha():
     #verifica se a planilha já existe e questiona se qquer subscrever
         if verificaArquivo(avisar=False):
-            criaNovamente = input(f"{LINHA}\n{ATENCAO} Atenção: A planilha '{ARQUIVO}' já existe na pasta do exercício!\nTem certeza que quer criá-la novamente\ncom os dados iniciais de teste? (s/n): ")
+            criaNovamente = input(f"{LINHA}\n{ATENCAO} Atenção: A planilha '{NOMEDOARQUIVO}' já existe!\nEstá na pasta do exercício ({DIRETORIOEXERCICIO})\n{LI} Tem certeza que quer criá-la novamente com os dados iniciais de teste?\n (s/n): ")
             #se desistir, não recria
             if criaNovamente.lower() != "s":
                 print("\nOperação cancelada.\nA planilha original foi mantida.")
                 input("Use ENTER para sair desta opção\n")
                 return
+        #se não existe, cria a planilha
         planilha = Workbook()
         
         # a variável (aba) é a aba da planilha
-        # em que se está trabalhando
-    
-        aba = planilha.active # .active é uma propriedade para "ativar" a aba da planilá
+        # em que se está trabalhando. Como foi criada agora, só temos esta aba :-)
+        aba = planilha.active # .active é uma propriedade de Workbook()
+        #declara-se a variável "aba", onde estamos trabalhando
     
         aba.title = "Produtos" # define o nome da aba da planilha
     
-    
+        #criando as colunas, baseando-se no mesmo formato do Excel
+        #esta é a linha inicial, [0]
         aba["A1"] = "Nome do Produto"
         aba["B1"] = "Quantidade"
         aba["C1"] = "Preço"
         aba["D1"] = "Estado"
     
-    
+        #inserindo dados: aba.append() = uma linha
         aba.append(["Toca-discos Pioneer",1,500,"usado"])    
         aba.append(["3 em Um Philips",1,600,"usado"])
         aba.append(["CD Pink Floyd Animals",15,80,"novo"])
@@ -98,6 +101,9 @@ def criaPlanilha():
         planilha.save(ARQUIVO) #é preciso salvar as alterações
     
         print(f"\n{OK} Planilha ({NOMEDOARQUIVO}) criada com sucesso!") 
+        
+        #mostra a planilha e seus valores para o usuário
+        mostraPlanilha(mostraValores=True)
 
  
 # Exercício 3 
@@ -105,8 +111,12 @@ def criaPlanilha():
 # operações do programa utilizem esse arquivo.
 
 def abrePlanilha(tipo="r"):
-    if not verificaArquivo(avisar=True):
-        return None
+    if tipo=="p":
+        if not verificaArquivo(avisar=True):
+            return None
+    else:
+        if not verificaArquivo(avisar=False):
+            return None
     
     planilha = load_workbook(ARQUIVO) #carrega a planilha e deixa pronta pro jogo
     if tipo == "p":
@@ -147,7 +157,7 @@ def mostraPlanilha(mostraValores=False,qualAba=False,top=False):
     DETALHES DOS PARÂMETROS:
     - O valor default de todos os parâmetros é False, para que quando omitido ou vazio funcione.
     - qualAba aceita: o número do índice (int) ou o "nome da aba" (str).
-    - top=True mostra apenas a primeira linha (ideal para conferir antes/depois de ações em colunas/linhas).
+    - top=True mostra apenas as duas primeiras linhas (Para exibir antes/depois das ações com colunas).
     """
        
     #############################
@@ -162,29 +172,16 @@ def mostraPlanilha(mostraValores=False,qualAba=False,top=False):
     else:
         tituloDaAba = str(qualAba).strip()
         aba = planilha[tituloDaAba]
-    #############################
-    """
-    mostraValores : tipo booleano | True : mostra as linhas e valores da tabela, False : mostra as abas
-iter_rows() # Percorre todas as linhas da planilha.
-usa índices (ipo:int) das linhas e colunas
-sem parâmetros declarados retorna todas as linhas e colunas
-
-parâmetros de listagem - ótimo para buscas
-min_row e min_column
-max_row e max_column
-
-values_only=True #tipo booleano - default: False - True Retorna os valores das células e fórmulas.
-
-    """
-
-     
+    #############################     
     
     if mostraValores:
-        #print(f" - - - PLANILHA - - - \n{planilha.title} Aba {aba.title}")
+        #print(f"PLANILHA {planilha.title} Aba {aba.title}")
         # trecho abaixo com a biblioteca padrão OpenPyXL
-        #
+        # printando uma lista por linha
+        # i=0
         # for linha in aba.iter_rows(values_only=True):
-        #     print(linha)
+        #     print(f"{LI} linha Nº{i} - {linha}")
+        #     i+=i  
         #
         #########################
         """
@@ -196,10 +193,10 @@ values_only=True #tipo booleano - default: False - True Retorna os valores das c
         para formar um desenho de tabela,
         e tem funções de tabulação de dados mais "amigas"
         """
-        #cria uma lista com os dados da aba
+        #cria uma lista com os dados da aba selecionada
         listaDados = list(aba.iter_rows(values_only=True))
         if not listaDados:
-            print(f"{ATENCAO} A aba '{aba.title}' está vazia.")
+            print(f"\n{ATENCAO} A aba Nº{qualAba}- '{aba.title}' está vazia.\nNão há nada para mostrar")
             return
 
         #separa o acabeçalho do resto
@@ -216,7 +213,7 @@ values_only=True #tipo booleano - default: False - True Retorna os valores das c
             print(f"\n[{NOMEDOARQUIVO}] Aba: {aba.title}")
             print(tabulate(listaDados[1:], headers=cabecalho, tablefmt="grid"))
     else:
-        print(f"\nABAS DA PLANILHA {NOMEDOARQUIVO}\n")
+        print(f"\nABAS DA PLANILHA [{NOMEDOARQUIVO}]")
         i=0 #escalando para quando tiver mais abas
         for aba in planilha.sheetnames:
             print(f"{LI} Aba Nª{i}: {aba}")
@@ -270,46 +267,104 @@ def mostraPlanilha2(mostraValores=False, qualAba=False, top=False):
 # Crie uma função que permita alterar o valor de uma célula existente na planilha. 
 # O usuário deverá informar qual célula será alterada e qual será o novo valor. 
 
+########################
+#função para reconhecer se a ação na célula seja na linha 1. para não mudar o cabeçalho
+def isTop(celula):
+    """Verifica se a célula pertence à linha 1 (cabeçalho/topo)."""
+    match = re.search(r'\d+', celula)
+    if match and int(match.group()) == 1:
+        print(f"{ERRO} Ação bloqueada!\nA linha 1 (cabeçalho) está protegida contra alterações.")
+        return True
+    return False
+###########################
+
 def acaoNaCelula(oq="ler"):
     
-    planilha = abrePlanilha()
-         
+    planilha = abrePlanilha()    
     if planilha is None: return
-    
     aba = planilha.active
     
-    if oq.lower()=="mudar":
-    
-        qualCelula = input("Informe a célula que você quer mudar o valor (ex.: A3): ")
-        valorAtual=aba[qualCelula].value
+    if oq.lower() == "mudar" or oq.lower() == "escrever":
+        while True:
+            legendaMensagem = "mudar o valor" if oq.lower() == "mudar" else "inserir um valor"
+            qualCelula = input(f"Informe a célula que você quer {legendaMensagem} (ex.: A3, B6): ").strip().upper()
+            
+            # Verifica se "qualCelula" não é False
+            # (o not é mais rápido)
+            if not qualCelula:
+                print(f"{ERRO} Informe uma célula!")
+                continue
+                
+            # verifica se a célula escolhida para alterar não está no cabecalho
+            if isTop(qualCelula):
+                continue
+            
+            if oq.lower() == "escrever":
+                valorAtual = aba[qualCelula].value
+                if valorAtual is not None and str(valorAtual).strip() != "":
+                    print(f"{ATENCAO} A célula [{qualCelula}] já está preenchida com [{valorAtual}].")
+                    print(f"{LI} Para alterá-la, utilize a opção (8) ALTERAR O CONTEÚDO DE UMA CÉLULA.")
+                    continue # Volta para o início do while para pedir outra célula
+                
+            break # Passou por tudo, sai do loop
+            
+        if oq.lower() == "mudar":
+            while True:
+                qualCelula = input("Informe a célula que você quer mudar o valor (ex.: A3): ").strip().upper()
+                
+                if not qualCelula:
+                    print(f"{ERRO} O campo não pode estar vazio! Informe uma célula.")
+                    continue
+                    
+                if isTop(qualCelula):
+                    continue
+                    
+                break
+            
+        valorAtual = aba[qualCelula].value
         print(f"{LINHAZINHA}\nValor atual da Célula [{qualCelula}] = [{valorAtual}]")
-        valorDaCelula = input(f"Novo valor para a célula {qualCelula}: ")
-        aba[qualCelula] = valorDaCelula #declara novo valor à célula selecionada
-        planilha.save(ARQUIVO) #salva
+        
+        # --- Verificação de tipo baseada no valor atual ---
+        if isinstance(valorAtual, int):
+            while True:
+                try:
+                    valorDaCelula = int(input(f"Novo valor tipo (número inteiro) para a célula {qualCelula}: "))
+                    break
+                except ValueError:
+                    print(f"{ERRO} Entrada inválida! A célula exige um número inteiro.")
+        elif isinstance(valorAtual, float):
+            while True:
+                try:
+                    valorDaCelula = float(input(f"Novo valor decimal para a célula {qualCelula}: ").replace(',', '.'))
+                    break
+                except ValueError:
+                    print(f"{ERRO} Entrada inválida! A célula exige um número decimal.")
+        else:
+            # Se o tipo for str ou vazio, aceita livremente
+            valorDaCelula = input(f"Novo valor para a célula {qualCelula}: ")
+        
+        aba[qualCelula] = valorDaCelula 
+        planilha.save(ARQUIVO)
         
         print(f"{OK} Célula alterada com sucesso.")
         print(f"Novo valor da Célula [{qualCelula}] = [{valorDaCelula}]")
     
-    elif oq.lower()=="ler":
-        qualCelula = input("Informe a célula (ex.: A1, B3...): ")
-        valorDaCelula = aba[qualCelula].value
-        
-        print("\nCélula encontrada.")
-        print(f"Célula [{qualCelula}] = [{valorDaCelula}]")
-     
-    elif oq.lower()=="escrever":
-        
-            qualCelula = input("Informe uma célula aleatória (ex.: A15, D10...): ")
-            valorDaCelula = input(f"Qual o valor para a célula {qualCelula}: ")
+    elif oq.lower() == "ler":
+        while True:
+            qualCelula = input("Informe a célula para leitura (ex.: A1, B3...): ").strip().upper()
+            if not qualCelula:
+                print(f"{ERRO} Informe uma célula!")
+                continue
+            break
             
-            aba[qualCelula] = valorDaCelula #declara novo valor à célula selecionada
-            planilha.save(ARQUIVO) #salva
+        valorDaCelula = aba[qualCelula].value
+        if valorDaCelula:
+            print("\nCélula encontrada.")
+            print(f"Célula [{qualCelula}] = [{valorDaCelula}]")
+        else:
+            print(f"A célula {qualCelula} está vazia")
         
-            print(f"{OK} Valor inserido na célula com sucesso.")
-            print(f"O valor da Célula [{qualCelula}] é [{valorDaCelula}]")
- 
-
- 
+        
 # Exercício 9 
 # Crie uma função que permita adicionar novos registros de produtos na planilha. 
 # O usuário deverá informar os dados do novo produto, quantidade e preço. 
@@ -366,7 +421,7 @@ def adicionarLinha2(oq="produto"):
             #isisntance reconhecendo o tipo. Classe type
             if isinstance(val, bool): #é booleano?
                 tipos.append(bool)
-            elif isinstance(val, int): #é inteirp
+            elif isinstance(val, int): #é inteiro
                 tipos.append(int)
             elif isinstance(val, float): #é float
                 tipos.append(float)
@@ -433,17 +488,17 @@ def removeLinha():
     aba = planilha.active
 
 
-    linha = int(input(f"Informe o número da linha que deseja remover (de 2 a {aba.max_row}): "))
+    qualLinha = int(input(f"Informe o número da linha que deseja remover (de 2 a {aba.max_row}): "))
 
 
-    if linha <= 1 or linha > aba.max_row: #a linha é a do cabeçalho? ou é uma linha além do máximo de linhas desta aba
-        print(f"{ERRO} A linha {linha} não é válida para remoção!")
+    if qualLinha <= 1 or qualLinha > aba.max_row: #a linha é a do cabeçalho? ou é uma linha além do máximo de linhas desta aba
+        print(f"{ERRO} A linhainha {qualLinha} não é válida para remoção!")
         return
 
-    aba.delete_rows(linha) # delete_rows(idx da linha) deleta uma linha específica
+    aba.delete_rows(qualLinha) # delete_rows(idx da linha) deleta uma linha específica
     planilha.save(ARQUIVO)
 
-    print(f"{OK} Linha {linha} removida com sucesso.")
+    print(f"{OK} Linha {qualLinha} removida com sucesso.")
  
 # Exercício 11 
 # Crie uma função que permita adicionar uma nova coluna na planilha. 
@@ -484,13 +539,13 @@ def acaoNaColuna(oq=None):
         if qualColuna >= aba.max_column:
             aba.insert_cols(qualColuna)
         else:
-            print(f"A coluna ID:{qualColuna} está sendo usada")
+            print(f"A coluna Nº:{qualColuna} está sendo usada")
             return
 
 
         titulo = input("Digite o título da nova coluna: ")
 
-        #.cell(em qual linha,índice da célula na linha).value = valor da célula
+        #.cell(reow=em qual linha,índice da célula na linha).value = valor da célula
         aba.cell(row=1,column=qualColuna).value = titulo
 
         planilha.save(ARQUIVO)
@@ -500,14 +555,21 @@ def acaoNaColuna(oq=None):
     
     if oq=="del":
         mostraPlanilha(mostraValores=True,qualAba=False,top=True)
-        qualColuna = int(input(f"Informe o número da coluna a deletar (entre 1 e {planilha.max_column}): "))
+        qualColuna = int(input(f"Informe o número da coluna a deletar (entre 1 e {aba.max_column}): "))
         
         if qualColuna < 1 or qualColuna > aba.max_column:
             print(f"A coluna {qualColuna} não está em uso.")
         
             return
         
-        
+        else:
+            if aba.max_row >= 2:
+                val_celula = aba.cell(row=2, column=qualColuna).value
+                # Se o valor na primeira linha de dados for numérico, protege a coluna
+            if isinstance(val_celula, (int, float)):
+                    titulo_coluna = aba.cell(row=1, column=qualColuna).value or f"Coluna {qualColuna}"
+                    print(f"{ERRO} Ação bloqueada! A coluna '{titulo_coluna}' contém dados numéricos essenciais para cálculos e não pode ser removida.")
+                    return
         
         aba.delete_cols(qualColuna)
         planilha.save(ARQUIVO)        
@@ -516,9 +578,6 @@ def acaoNaColuna(oq=None):
         mostraPlanilha(mostraValores=True,qualAba=False,top=True)
         
     #mostra para o usuário a tabela com a coluna nova. O cabeçalho e a primeira linha
-    # cabecalhos = [cell.value for cell in aba[1] if cell.value is not None]
-    # linha1 = [cell.value for cell in aba[2] if cell.value is not None]
-    # print(tabulate([linha1], headers=cabecalhos, tablefmt="grid"))
         mostraPlanilha(mostraValores=True,qualAba=0,top=True)
 
  
@@ -630,11 +689,457 @@ def acaoNaAba(oq="ver"):
 # Crie uma função que calcule automaticamente o valor total de cada produto. 
 # O valor total deverá ser calculado utilizando a quantidade multiplicada pelo preço. 
 # O resultado deverá ser armazenado em uma nova coluna chamada Total. 
- 
+def calcularTotalProduto():
+    planilha = abrePlanilha()
+    if planilha is None: return
+    
+    aba = planilha.active
+    
+    # Localizar os (idx) das colunas pelo cabeçalho (Linha 1)
+    cabecalhos = [cell.value for cell in aba[1] if cell.value is not None]
+    
+    # Procura pelas colunas necessárias (ignorando maiúsculas/minúsculas)
+    idx_produto = -1
+    idx_qtd = -1
+    idx_preco = -1
+    idx_total = -1
+    
+    for i, h in enumerate(cabecalhos):
+        h_lower = str(h).lower()
+        if "produto" in h_lower:
+            idx_produto = i
+        elif "quantidade" in h_lower or "qtd" in h_lower:
+            idx_qtd = i
+        elif "preço" in h_lower or "preco" in h_lower:
+            idx_preco = i
+        elif "total" in h_lower:
+            idx_total = i
+            
+    if idx_produto == -1 or idx_qtd == -1 or idx_preco == -1:
+        print(f"{ERRO} Não foi possível encontrar as colunas obrigatórias (Produto, Quantidade, Preço).")
+        return
+
+    # se a coluna "Total" não existir, adiciona ela na última posição
+    if idx_total == -1:
+        nova_coluna_idx = aba.max_column + 1 # vasculha e encontra a última coluna, para criar a coluna [Total]
+        aba.cell(row=1, column=nova_coluna_idx).value = "Total"
+        idx_total = nova_coluna_idx - 1 # Índice baseado em 0 para a lista
+        # Atualiza os cabeçalhos
+        cabecalhos = [cell.value for cell in aba[1] if cell.value is not None]
+
+    # for nas linhas depois d o cabeçalho, pra calcular e atualizar
+    for row_idx in range(2, aba.max_row + 1):
+        cel_qtd = aba.cell(row=row_idx, column=idx_qtd + 1).value
+        cel_preco = aba.cell(row=row_idx, column=idx_preco + 1).value
+        
+        # Filtro de segurança: se quantidade ou preço não forem numéricos, assume 0 para evitar quebrar
+        try:
+            qtd = float(str(cel_qtd).replace(',', '.')) if cel_qtd is not None else 0.0
+        except ValueError:
+            qtd = 0.0
+            
+        try:
+            preco = float(str(cel_preco).replace(',', '.')) if cel_preco is not None else 0.0
+        except ValueError:
+            preco = 0.0
+            
+        total_linha = qtd * preco
+        
+        # Insere o resultado na coluna Total da respectiva linha
+        aba.cell(row=row_idx, column=idx_total + 1).value = total_linha
+
+    planilha.save(ARQUIVO)
+    print(f"{OK} Cálculo dos valores totais realizados e salvos com sucesso!")
+
+    # 4. Renderização personalizada: Filtrar apenas as colunas desejadas ("Produto", "Quantidade", "Total")
+    listaDados = list(aba.iter_rows(values_only=True))
+    if len(listaDados) <= 1:
+        print(f"{ATENCAO} A tabela não possui dados de produtos.")
+        return
+
+    # pega os (i) idx - das colunas a mostrar
+    colunasDesejadas = []
+    titulosDesejados = []
+    
+    for idx, titulo in enumerate(listaDados[0]):
+        if titulo in [cabecalhos[idx_produto], cabecalhos[idx_preco],cabecalhos[idx_qtd], cabecalhos[idx_total]]:
+            colunasDesejadas.append(idx)
+            titulosDesejados.append(titulo)
+
+    # Monta apenas as linhas filtradas com as 3 colunas escolhidas
+    linhasFiltradas = []
+    for linha in listaDados[1:]:
+        # Pega apenas os valores das colunas mapeadas
+        linhaFiltrada = [linha[i] if i < len(linha) else "" for i in colunasDesejadas]
+        linhasFiltradas.append(linhaFiltrada)
+
+    # Exibe no terminal com o tabulate limpo
+    print(f"\n--- [Relatório Filtrado] Aba: {aba.title} ---")
+    print(tabulate(linhasFiltradas, headers=titulosDesejados, tablefmt="grid")) 
 # Exercício 17 
 # Crie uma função que aplique formatação ao cabeçalho da planilha. 
 # O cabeçalho deverá possuir destaque visual para facilitar a leitura do relatório. 
- 
+
+# Exercício 22 
+# Crie uma função que permita aplicar filtros nos dados da planilha. 
+
+def formataTabela2(oq="top", fontWeight=800, color="navy", textTransform="uppercase", backgroundColor="#F0F0F0", borderBottom=True):
+    planilha = abrePlanilha()
+    if planilha is None: return
+    
+    aba = planilha.active
+    
+    match oq.lower():
+        case "top" | "cabecalho":
+            print(f"\nAplicando formatação no cabeçalho...")
+            color=int(input(f"Escolha a cor do texto do cabeçalho?\n{LI} 1- CINZA\n{LI} 2- PRETO\n{LI} 3- AZUL\n{LI} 4- LARANJA\n{LI} "))
+            # Text Color
+            match str(color).lower():
+                case "1" | "gray" | "cinza":
+                    hexColor = "666666"
+                case "2" | "black" | "preto":
+                    hexColor = "000000"
+                case "3" | "navy" | "azul":
+                    hexColor = "5d66fd"
+                case "4" | "darkorange" | "laranja":
+                    hexColor = "ff8d3a"
+                case _:
+                    hexColor = "000000" # Padrão preto
+            
+            input("\nENTER para seguir com a personalização do cabeçalho\n")
+            
+            # Background Sólido
+            backgroundColor=input(f"Escolha a cor do fundo:\n{LI} 1- CINZA\n{LI} 2- PRETO\n{LI} 3- AZUL\n{LI} 4- LARANJA\n{LI} ")
+            match str(backgroundColor).lower():
+                case "1" | "lightgray" | "cinza":
+                    bgHex = "999999"
+                case "2" | "black" | "preto":
+                    bgHex = "000000"
+                case "3" | "lightblue" | "azul":
+                    bgHex = "b3b7f2"
+                case "4" | "lightorange" | "laranja":
+                    bgHex = "fcddc7"
+                case _:
+                    bgHex = "666666" # Padrão gray
+            # Aceita códigos hex diretos (ex: #333333 ou 333333) ou padrões
+            bgHex = backgroundColor.replace("#", "")
+            input("\nENTER para seguir com a personalização do cabeçalho\n")
+            fontFamily=input(f"Escolha a fonte do título:\n{LI} 1- Arial\n{LI} 2- Verdana\n{LI} 3- Calibri")
+            
+            match str(fontFamily).lower():
+                case "1" | "arial":
+                    fontFamily = "Arial"
+                case "2" | "verdana":
+                    fontFamily = "Verdana"
+                case "3" | "caibri":
+                    fontFamily = "Calibri"
+                case _:
+                    fontFamily = "Arial" # Padrão arial            
+            
+            # Estilos do OpenPyxl
+            fonteCabecalho = Font(
+                name=fontFamily,
+                family=2,
+                size=14,
+                bold=(fontWeight >= 700),
+                condense=True,
+                color=hexColor
+            )
+            
+            preenchimentoFundo = PatternFill(
+                start_color=bgHex,
+                end_color=bgHex,
+                fill_type="solid"
+            )
+            
+            # Borda inferior opcional na mesma cor do texto
+            bordaInferior = None
+            if borderBottom:
+                ladoBorda = Side(style="medium", color=hexColor)
+                bordaInferior = Border(bottom=ladoBorda)
+
+            # 4. Aplicação na Linha 1 (Cabeçalho)
+            for cell in aba[1]:
+                if cell.value is not None:
+                    # Text-transform
+                    textoOriginal = str(cell.value)
+                    match textTransform.lower():
+                        case "uppercase":
+                            cell.value = textoOriginal.upper()
+                        case "lowercase":
+                            cell.value = textoOriginal.lower()
+                        case "capitalize":
+                            cell.value = textoOriginal.capitalize()
+                    
+                    # Aplicando estilos
+                    cell.font = fonteCabecalho
+                    cell.fill = preenchimentoFundo
+                    if bordaInferior:
+                        cell.border = bordaInferior
+            
+            planilha.save(ARQUIVO)
+            print(f"{OK} Cabeçalho formatado com sucesso!")
+        
+        case "filtro":
+            aba.auto_filter.ref = aba.dimensions
+            planilha.save(ARQUIVO)
+            print(f"{OK} Filtros aplicados.")
+        case _:
+            print(f"{ATENCAO} Parâmetro '{oq}' não reconhecido para formatação.") 
+
+def formataTabela(oq="top", fontWeight=800, color="darkOrange", textTransform="uppercase", backgroundColor="#999999", borderBottom=True):
+    planilha = abrePlanilha()
+    if planilha is None: return
+    
+    aba = planilha.active
+    
+    match oq.lower():
+        case "top" | "cabecalho":
+            print(f"\nAplicando formatação no cabeçalho...")
+            
+            # 1. Tratamento da Cor da Fonte
+            match str(color).lower():
+                case "gray" | "cinza":
+                    hexColor = "666666"
+                case "black" | "preto":
+                    hexColor = "000000"
+                case "navy" | "azul":
+                    hexColor = "000080"
+                case "darkorange" | "laranja":
+                    hexColor = "FF8C00"
+                case _:
+                    hexColor = "000080" # Padrão navy
+            
+            # 2. Tratamento da Cor de Fundo (Background)
+            # Aceita códigos hex diretos (ex: #333333 ou 333333) ou padrões
+            bgHex = backgroundColor.replace("#", "")
+            
+            # 3. Construção dos Estilos do OpenPyxl
+            fonteCabecalho = Font(
+                name="Calibri",
+                size=11,
+                bold=(fontWeight >= 700),
+                color=hexColor
+            )
+            
+            preenchimentoFundo = PatternFill(
+                start_color=bgHex,
+                end_color=bgHex,
+                fill_type="solid"
+            )
+            
+            # Borda inferior opcional na mesma cor do texto
+            bordaInferior = None
+            if borderBottom:
+                ladoBorda = Side(style="medium", color=hexColor)
+                bordaInferior = Border(bottom=ladoBorda)
+
+            # 4. Aplicação na Linha 1 (Cabeçalho)
+            for cell in aba[1]:
+                if cell.value is not None:
+                    # Text-transform
+                    textoOriginal = str(cell.value)
+                    match textTransform.lower():
+                        case "uppercase":
+                            cell.value = textoOriginal.upper()
+                        case "lowercase":
+                            cell.value = textoOriginal.lower()
+                        case "capitalize":
+                            cell.value = textoOriginal.capitalize()
+                    
+                    # Aplicando estilos
+                    cell.font = fonteCabecalho
+                    cell.fill = preenchimentoFundo
+                    if bordaInferior:
+                        cell.border = bordaInferior
+            
+            planilha.save(ARQUIVO)
+            print(f"{OK} Cabeçalho formatado com sucesso!")
+            
+        case _:
+            print(f"{ATENCAO} Parâmetro '{oq}' não reconhecido para formatação.")
+
+def formataTabela3(oq="top", color="darkOrange", corTexto="#333333", backgroundColor="#999999"):
+    planilha = abrePlanilha()
+    if planilha is None: 
+        return
+    
+    aba = planilha.active
+    
+    # Tratamento simples de cores caso venham em formato amigável
+    coresHex = {
+        "darkorange": "FF8C00",
+        "navy": "000080",
+        "black": "000000",
+        "gray": "666666"
+    }
+    
+    # Converte cor do texto do cabeçalho/borda principal se for string nomeada
+    corPrincipalHex = coresHex.get(color.lower(), color.replace("#", ""))
+    corConteudoHex = corTexto.replace("#", "")
+    bgHex = backgroundColor.replace("#", "")
+    
+    match oq.lower():
+        case "top" | "cabecalho":
+            # Cabeçalho: uppercase, bold, alinhado ao centro, borda inferior medium na cor principal
+            fonteCabecalho = Font(name="Arial", size=11, bold=True, color=corPrincipalHex)
+            preenchimentoFundo = PatternFill(fill_type="solid", start_color=bgHex, end_color=bgHex)
+            alinhamento = Alignment(horizontal="center", vertical="center")
+            bordaCabecalho = Border(bottom=Side(style="medium", color=corPrincipalHex))
+
+            for cell in aba[1]:
+                if cell.value is not None:
+                    cell.value = str(cell.value).upper()
+                    cell.font = fonteCabecalho
+                    cell.fill = preenchimentoFundo
+                    cell.alignment = alinhamento
+                    cell.border = bordaCabecalho
+                    
+        case "filtros":
+            # Ativa os filtros nas colunas preenchidas
+            aba.auto_filter.ref = aba.dimensions
+            
+        case "bordas":
+            # Usa backgroundColor para linhas internas (thin) e color principal para bordas de destaque (medium)
+            bordaInterna = Side(style="thin", color=bgHex)
+            bordaExterna = Side(style="medium", color=corPrincipalHex)
+            
+            # Aplica formatação de fonte padrão para o conteúdo das células (corTexto)
+            fonteConteudo = Font(name="Arial", size=10, color=corConteudoHex)
+            
+            for row in aba[aba.dimensions]:
+                # Pula a linha 1 se já foi tratada pelo cabeçalho
+                for cell in row:
+                    cell.font = fonteConteudo
+                    # Borda padrão em grade para todas as células da tabela
+                    cell.border = Border(
+                        left=bordaInterna, 
+                        right=bordaInterna, 
+                        top=bordaInterna, 
+                        bottom=bordaInterna
+                    )
+                    
+        case "congelar" | "top-sticky":
+            # Mantém o cabeçalho visível na rolagem
+            aba.freeze_panes = "A2"
+            
+        case _:
+            print(f"{ATENCAO} Opção de formatação '{oq}' não reconhecida.")
+            return
+
+    # Salvamento centralizado no final
+    planilha.save(ARQUIVO)
+    print(f"{OK} Missão: {oq} executada com sucesso!")
+
+def menuPersonalizarCabecalho():
+    """Menu interativo para coletar preferências de estilo do cabeçalho antes de aplicar."""
+    print(f"\n{LINHA}\n--- PERSONALIZAÇÃO DO CABEÇALHO ---")
+    
+    # 1. Escolha da Fonte
+    while True:
+        print(f"\n{LI} Escolha a família da fonte:")
+        print("  1 - Calibri (Padrão)")
+        print("  2 - Arial")
+        print("  3 - Verdana")
+        print("  4 - Open Sans")
+        escolhaFonte = input(f"{LI} Opção (1-4): ").strip()
+        
+        match escolhaFonte:
+            case "1" | "":
+                fontFamily = "Calibri"
+                break
+            case "2":
+                fontFamily = "Arial"
+                break
+            case "3":
+                fontFamily = "Verdana"
+                break
+            case "4":
+                fontFamily = "Open Sans"
+                break
+            case _:
+                print(f"{ERRO} Opção inválida! Escolha de 1 a 4.")
+
+    # 2. Peso da Fonte (Negrito)
+    while True:
+        escolhaBold = input(f"\n{LI} Deseja o texto em negrito? (s/n): ").strip().lower()
+        if escolhaBold in ["s", "sim"]:
+            fontWeight = 800
+            break
+        elif escolhaBold in ["n", "nao", "não"]:
+            fontWeight = 400
+            break
+        print(f"{ERRO} Digite 's' para sim ou 'n' para não.")
+
+    # 3. Cor do Texto
+    while True:
+        print(f"\n{LI} Escolha a cor do texto:")
+        print("  1 - Azul Navy")
+        print("  2 - Preto")
+        print("  3 - Cinza")
+        print("  4 - Laranja Escuro")
+        escolhaCor = input("Opção (1-4): ").strip()
+        
+        match escolhaCor:
+            case "1" | "":
+                color = "navy"
+                break
+            case "2":
+                color = "black"
+                break
+            case "3":
+                color = "gray"
+                break
+            case "4":
+                color = "darkorange"
+                break
+            case _:
+                print(f"{ERRO} Opção inválida!")
+
+    # 4. Cor de Fundo (Background)
+    while True:
+        print(f"\n{LI} Escolha a cor de fundo (Background):")
+        print("  1 - Cinza Claro (#F0F0F0)")
+        print("  2 - Cinza Médio (#999999)")
+        print("  3 - Cinza Escuro (#333333)")
+        escolhaBg = input("Opção (1-3): ").strip()
+        
+        match escolhaBg:
+            case "1" | "":
+                backgroundColor = "#F0F0F0"
+                break
+            case "2":
+                backgroundColor = "#999999"
+                break
+            case "3":
+                backgroundColor = "#333333"
+                break
+            case _:
+                print(f"{ERRO} Opção inválida!")
+
+    # 5. Borda Inferior
+    while True:
+        escolhaBorda = input(f"\n{LI} Deseja aplicar borda inferior reforçada? (s/n): ").strip().lower()
+        if escolhaBorda in ["s", "sim"]:
+            borderBottom = True
+            break
+        elif escolhaBorda in ["n", "nao", "não"]:
+            borderBottom = False
+            break
+        print(f"{ERRO} Digite 's' ou 'n'.")
+
+    # Executa a função definitiva com os parâmetros acumulados
+    print(f"\nAplicando formatação personalizada...")
+    formataTabela(
+        oq="top",
+        fontFamily=fontFamily,
+        fontWeight=fontWeight,
+        color=color,
+        textTransform="uppercase",
+        backgroundColor=backgroundColor,
+        borderBottom=borderBottom
+    )
+
 # Exercício 18 
 # Crie uma função que aplique bordas nas células utilizadas pela tabela de 
 # produtos. 
@@ -650,8 +1155,7 @@ def acaoNaAba(oq="ver"):
 # Crie uma função que mantenha o cabeçalho da planilha visível durante a 
 # navegação em grandes relatórios. 
  
-# Exercício 22 
-# Crie uma função que permita aplicar filtros nos dados da planilha. 
+
  
 # Exercício 23 
 # Crie uma função que transforme os dados existentes em uma tabela formatada do 
@@ -737,8 +1241,10 @@ while True:
             
         case "5":
             
-            print(f"{LINHA}\nLISTANDO A PLANILHA {NOMEDOARQUIVO}")
-            mostraPlanilha(mostraValores=True)
+            print(f"{LINHA}\nLISTANDO UMA ABA DA PLANILHA")
+            mostraPlanilha()
+            qualAba=input(f"Qual o Nº da aba que queres visualizar?\n{LI} ")
+            mostraPlanilha(mostraValores=True,qualAba=qualAba,top=False)
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
             
         case "6":
@@ -779,12 +1285,12 @@ while True:
             
         case "12":
             print(f"{LINHA}\nVAMOS REMOVER UMA COLUNA DA TABELA")
-            acaoNaColuna("del")
+            acaoNaColuna(oq="del")
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
             
         case "13":
             print(f"{LINHA}\nVAMOS ADICIONAR UMA NOVA COLUNA NA TABELA")
-            acaoNaColuna("add")
+            acaoNaColuna(oq="add")
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")
         
         case "14":
@@ -807,44 +1313,45 @@ while True:
             
         case "17":
             
-            print("{LINHA}\nCALCULAR O VALOR TOTAL DE CADA PRODUTO")
-            #valorTotalProduto(quant="1")
+            print(f"{LINHA}\nCALCULAR O VALOR TOTAL DE CADA PRODUTO")
+            calcularTotalProduto()
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "18":
             
-            print(f"{LINHA}\nFORMATAR O CABEÇALHO DA TABELA\n")
-            #formatarTabela(oq="top")
+            print(f"{LINHA}\nFORMATAnDO O CABEÇALHO DA TABELA\n")
+            formataTabela(oq="top", fontWeight=800, color="black", textTransform="uppercase", backgroundColor="#f4ddcb", borderBottom=True)
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "19":
             
             print("APLICAR BORDAS À TABELA\n")
-            #formatarTabela(oq="bordas")
+            #formataTabela(oq="bordas")
+            #https://share.google/OM9kQM1kyLwcsWW1v
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
                     
         case "20":
             
                 print("AJUSTAR O TAMANHO DAS COLUNAS NA TABELA\n")
-                #formatarTabela(oq="colunas")
+                #formataTabela(oq="colunas")
                 input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
                                                 
         case "21":
             
                 print("MESCLAR CÉLULAS DA TABELA\n")
-                #formatarTabela(oq="top", case="2")
+                #formataTabela(oq="top", case="2")
                 input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "22":
             
                 print("OCULTAR O CABEÇALHO DA TABELA\n")
-                #formatarTabela(oq="top", case="2")
+                #formataTabela(oq="top", case="2")
                 input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "23":                                    
             
                 print("APLICAR FILTROS NA TABELA\n")
-                #formatarTabela(oq="filtros")
+                #formataTabela(oq="filtros")
                 input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "24":
