@@ -392,8 +392,8 @@ def adicionarLinha():
     print("Linha adicionada com sucesso.")
     
  #####################
-""" Escalando para quando não tiver acesso à planilha """
- 
+
+""" Escalando para quando não tiver acesso à planilha """ 
 def adicionarLinha2(oq="produto"):
     if oq.lower()=="linha":
         oq="nova Linha"
@@ -500,6 +500,7 @@ def removeLinha():
 
     print(f"{OK} Linha {qualLinha} removida com sucesso.")
  
+#COLUNAS
 # Exercício 11 
 # Crie uma função que permita adicionar uma nova coluna na planilha. 
 # O usuário deverá informar o nome da nova coluna e os valores que serão 
@@ -507,6 +508,7 @@ def removeLinha():
 
 # Exercício 12 
 # Crie uma função que permita remover uma coluna existente na planilha. 
+
 
 def acaoNaColuna(oq=None):
     
@@ -580,8 +582,7 @@ def acaoNaColuna(oq=None):
     #mostra para o usuário a tabela com a coluna nova. O cabeçalho e a primeira linha
         mostraPlanilha(mostraValores=True,qualAba=0,top=True)
 
- 
- 
+#ABAS
 # Exercício 13 
 # Crie uma função que permita criar uma nova aba dentro do arquivo Excel. 
 # A nova aba deverá possuir um nome informado pelo usuário. 
@@ -776,6 +777,8 @@ def calcularTotalProduto():
     # Exibe no terminal com o tabulate limpo
     print(f"\n--- [Relatório Filtrado] Aba: {aba.title} ---")
     print(tabulate(linhasFiltradas, headers=titulosDesejados, tablefmt="grid")) 
+
+#FORMATAÇÃO
 # Exercício 17 
 # Crie uma função que aplique formatação ao cabeçalho da planilha. 
 # O cabeçalho deverá possuir destaque visual para facilitar a leitura do relatório. 
@@ -982,7 +985,7 @@ def formataTabela3(oq="top", color="darkOrange", corTexto="#333333", backgroundC
     match oq.lower():
         case "top" | "cabecalho":
             # Cabeçalho: uppercase, bold, alinhado ao centro, borda inferior medium na cor principal
-            fonteCabecalho = Font(name="Arial", size=11, bold=True, color=corPrincipalHex)
+            fonteCabecalho = Font(name="Arial", size=12, bold=True, color=corPrincipalHex)
             preenchimentoFundo = PatternFill(fill_type="solid", start_color=bgHex, end_color=bgHex)
             alinhamento = Alignment(horizontal="center", vertical="center")
             bordaCabecalho = Border(bottom=Side(style="medium", color=corPrincipalHex))
@@ -1000,28 +1003,52 @@ def formataTabela3(oq="top", color="darkOrange", corTexto="#333333", backgroundC
             aba.auto_filter.ref = aba.dimensions
             
         case "bordas":
-            # Usa backgroundColor para linhas internas (thin) e color principal para bordas de destaque (medium)
+            # Usa backgroundColor para linhas internas (thin) e color principal para bordas de destaque (thick)
             bordaInterna = Side(style="thin", color=bgHex)
-            bordaExterna = Side(style="medium", color=corPrincipalHex)
+            bordaExterna = Side(style="thick", color=corPrincipalHex)
+            alinhamento = Alignment(horizontal="center", vertical="center")
             
             # Aplica formatação de fonte padrão para o conteúdo das células (corTexto)
-            fonteConteudo = Font(name="Arial", size=10, color=corConteudoHex)
+            
             
             for row in aba[aba.dimensions]:
                 # Pula a linha 1 se já foi tratada pelo cabeçalho
                 for cell in row:
-                    cell.font = fonteConteudo
-                    # Borda padrão em grade para todas as células da tabela
+                    # Borda fina na linha e grossa na coluna
                     cell.border = Border(
-                        left=bordaInterna, 
-                        right=bordaInterna, 
+                        left=bordaExterna, 
+                        right=bordaExterna, 
                         top=bordaInterna, 
                         bottom=bordaInterna
-                    )
-                    
+                    )             
         case "congelar" | "top-sticky":
             # Mantém o cabeçalho visível na rolagem
             aba.freeze_panes = "A2"
+            
+        case "center" | "colunas":
+            alinhamento = Alignment(horizontal="center", vertical="center")
+            fonteConteudo = Font(name="Arial", size=11, color=corConteudoHex)
+            for row in aba[aba.dimensions]:
+                # Pula a linha 1 se já foi tratada pelo cabeçalho
+                for cell in row:
+                    cell.font = fonteConteudo
+                    cell.alignment=alinhamento
+            
+            
+            for coluna in aba.columns:
+                   
+                    maior = 0
+                    letra = coluna[0].column_letter
+                    for celula in coluna:
+                        if celula.value:
+            
+                            tamanho = len(str(celula.value))       
+            
+                            if tamanho > maior:            
+                                maior = tamanho
+            
+                    aba.column_dimensions[letra].width = maior + 4
+            
             
         case _:
             print(f"{ATENCAO} Opção de formatação '{oq}' não reconhecida.")
@@ -1320,21 +1347,21 @@ while True:
         case "18":
             
             print(f"{LINHA}\nFORMATAnDO O CABEÇALHO DA TABELA\n")
-            formataTabela(oq="top", fontWeight=800, color="black", textTransform="uppercase", backgroundColor="#f4ddcb", borderBottom=True)
+            formataTabela3(oq="top", color="#FF6A00", backgroundColor="#f4ddcb", corTexto="#606060")
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "19":
             
             print("APLICAR BORDAS À TABELA\n")
-            #formataTabela(oq="bordas")
+            formataTabela3(oq="bordas", color="#FF6A00", backgroundColor="#f4ddcb", corTexto="#606060")
             #https://share.google/OM9kQM1kyLwcsWW1v
             input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
                     
         case "20":
             
-                print("AJUSTAR O TAMANHO DAS COLUNAS NA TABELA\n")
-                #formataTabela(oq="colunas")
-                input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
+            print("AJUSTAR O TAMANHO DAS COLUNAS NA TABELA\n")
+            formataTabela3(oq="colunas")
+            input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
                                                 
         case "21":
             
@@ -1351,7 +1378,7 @@ while True:
         case "23":                                    
             
                 print("APLICAR FILTROS NA TABELA\n")
-                #formataTabela(oq="filtros")
+                formataTabela3(oq="filtros")
                 input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "24":
