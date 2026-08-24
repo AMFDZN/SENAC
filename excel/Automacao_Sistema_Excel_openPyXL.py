@@ -1005,7 +1005,8 @@ def formataTabela3(oq="top", color="darkOrange", corTexto="#333333", backgroundC
         case "bordas":
             # Usa backgroundColor para linhas internas (thin) e color principal para bordas de destaque (thick)
             bordaInterna = Side(style="thin", color=bgHex)
-            bordaExterna = Side(style="thick", color=corPrincipalHex)
+            bordaExterna = Side(style="medium", color=corPrincipalHex)
+            bordaFinal= Side(style="thick", color=corPrincipalHex)
             alinhamento = Alignment(horizontal="center", vertical="center")
             
             # Aplica formatação de fonte padrão para o conteúdo das células (corTexto)
@@ -1020,7 +1021,42 @@ def formataTabela3(oq="top", color="darkOrange", corTexto="#333333", backgroundC
                         right=bordaExterna, 
                         top=bordaInterna, 
                         bottom=bordaInterna
-                    )             
+                    )
+                    
+            linhaFinal = aba.max_row
+            colunaFinal = aba.max_column
+
+            for r in range(1, linhaFinal + 1):
+                for c in range(1, colunaFinal + 1):
+                    celula = aba.cell(row=r, column=c)
+                    
+                    # Mantém as bordas internas finas como padrão
+                    bordaEsquerda = bordaExterna
+                    bordaDireita = bordaExterna
+                    bordaTop = bordaInterna
+                    bordaBottom = bordaInterna
+
+                    # Aplica borda espessa na PRIMEIRA COLUNA (left)
+                    if c == 1:
+                        bordaEsquerda = bordaExterna
+
+                    # Aplica borda espessa na ÚLTIMA COLUNA (right)
+                    if c == colunaFinal:
+                        bordaDireita = bordaExterna
+
+                    # Aplica borda espessa na ÚLTIMA LINHA (bottom)
+                    if r == linhaFinal:
+                        bordaBottom = bordaExterna
+
+                    # Aplica o objeto Border montado na célula
+                    celula.border = Border(
+                        left=bordaEsquerda,
+                        right=bordaDireita,
+                        top=bordaTop,
+                        bottom=bordaBottom
+                    )
+                    
+                                 
         case "congelar" | "top-sticky":
             # Mantém o cabeçalho visível na rolagem
             aba.freeze_panes = "A2"
@@ -1048,6 +1084,7 @@ def formataTabela3(oq="top", color="darkOrange", corTexto="#333333", backgroundC
                                 maior = tamanho
             
                     aba.column_dimensions[letra].width = maior + 4
+                    aba.row_dimensions[celula.row].height = 20
             
             
         case _:
