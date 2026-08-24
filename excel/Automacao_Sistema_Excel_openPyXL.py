@@ -1214,7 +1214,26 @@ def menuPersonalizarCabecalho():
  
 # Exercício 20 
 # Crie uma função que permita mesclar células para criar um título de relatório. 
- 
+def mesclarTitulo():
+    planilha = abrePlanilha()
+    if planilha is None: return
+    aba = planilha.active
+
+    aba.insert_rows(1)
+    max_col = max(aba.max_column, 1)
+    letra_fim = get_column_letter(max_col)
+    
+    range_mescla = f"A1:{letra_fim}1"
+    aba.merge_cells(range_mescla)
+
+    celula_titulo = aba["A1"]
+    celula_titulo.value = "RELATÓRIO DE ESTOQUE E PRODUTOS"
+    celula_titulo.font = Font(name="Arial", size=14, bold=True, color="1F4E79")
+    celula_titulo.alignment = Alignment(horizontal="center", vertical="center")
+    celula_titulo.fill = PatternFill(fill_type="solid", start_color="D9E1F2", end_color="D9E1F2")
+
+    planilha.save(ARQUIVO)
+    print(f"{OK} Título inserido e células mescladas na faixa {range_mescla}.") 
 # Exercício 21 
 # Crie uma função que mantenha o cabeçalho da planilha visível durante a 
 # navegação em grandes relatórios. 
@@ -1224,17 +1243,83 @@ def menuPersonalizarCabecalho():
 # Exercício 23 
 # Crie uma função que transforme os dados existentes em uma tabela formatada do 
 # Excel. 
+
+def converterParaTabelaExcel():
+    planilha = abrePlanilha()
+    if planilha is None: return
+    aba = planilha.active
+
+    ref = aba.dimensions
+    tabela = Table(displayName="TabelaProdutos", ref=ref)
+    estilo = TableStyleInfo(name="TableStyleMedium9", showFirstColumn=False,
+                            showLastColumn=False, showRowStripes=True, showColumnStripes=True)
+    tabela.tableStyleInfo = estilo
+
+    if "TabelaProdutos" in aba.tables:
+        del aba.tables["TabelaProdutos"]
+
+    aba.add_table(tabela)
+
+    planilha.save(ARQUIVO)
+    print(f"{OK} Intervalo convertido em Tabela nativa do Excel estilo TabelaProdutos.")
  
 # Exercício 24 
 # Crie uma função que gere um gráfico utilizando os dados da planilha. 
 # O gráfico deverá representar informações dos produtos cadastrados. 
- 
+def gerarGrafico():
+    planilha = abrePlanilha()
+    if planilha is None: return
+    aba = planilha.active
+
+    cabecalhos = [cell.value for cell in aba[1] if cell.value is not None]
+    col_prod = col_total = -1
+
+    for i, h in enumerate(cabecalhos):
+        h_str = str(h).lower()
+        if "produto" in h_str:
+            col_prod = i + 1
+        elif "total" in h_str or "quantidade" in h_str:
+            if col_total == -1:
+                col_total = i + 1
+
+    if col_prod == -1 or col_total == -1:
+        print(f"{ERRO} Certifique-se de ter colunas válidas e executar o 'Cálculo de Totais' antes.")
+        return
+
+    chart = BarChart()
+    chart.type = "col"
+    chart.style = 10
+    chart.title = "Totais por Produto"
+    chart.y_axis.title = "Valores"
+    chart.x_axis.title = "Produtos"
+
+    dados = Reference(aba, min_col=col_total, min_row=1, max_row=aba.max_row)
+    categorias = Reference(aba, min_col=col_prod, min_row=2, max_row=aba.max_row)
+
+    chart.add_data(dados, titles_from_data=True)
+    chart.set_categories(categorias)
+
+    aba.add_chart(chart, "F2")
+
+    planilha.save(ARQUIVO)
+    print(f"{OK} Gráfico de colunas adicionado à célula F2 com sucesso!") 
 # Exercício 25 
 # Crie uma função que gere um relatório final automatizado. 
 # O relatório deverá: criar uma área de apresentação, organizar os dados dos 
 # produtos, aplicar formatação, calcular informações automaticamente, ajustar a 
 # visualização da planilha e gerar um arquivo pronto para apresentação.  
- 
+def gerarRelatorioAutomatizado():
+    print(f"\n--- INICIANDO AUTOMAÇÃO COMPLETA DO RELATÓRIO ---")
+    criaPlanilha()
+    calcularTotalProduto()
+    mesclarTitulo()
+    formataTabela3(oq="top")
+    formataTabela3(oq="bordas")
+    formataTabela3(oq="colunas")
+    formataTabela3(oq="congelar")
+    formataTabela3(oq="filtros")
+    gerarGrafico()
+    print(f"\n{OK} RELATÓRIO COMPLETO E AUTOMATIZADO GERADO COM SUCESSO!") 
  
  
  
