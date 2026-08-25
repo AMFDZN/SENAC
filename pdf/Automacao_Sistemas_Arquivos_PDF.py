@@ -35,11 +35,11 @@ CERTIFICADO = "certificado.pdf"
 CONTRATO = "contrato.pdf"
 
 #CRIAR DENTRO DA PASTA DO EXERCÍCIO
-DIRETORIOEXERCICIO = Path(__file__).resolve().parent #pasta do exercício [excel]
+DIRETORIOEXERCICIO = Path(__file__).resolve().parent #pasta do exercício [pdf]
 CERIFICADO = DIRETORIOEXERCICIO / CERTIFICADO
 CONTRATO = DIRETORIOEXERCICIO / CONTRATO
 PASTA_PDFS = DIRETORIOEXERCICIO / PDFS 
-PASTA_SAIDA = DIRETORIOEXERCICIO / SAIDA 
+PASTA_SAIDA = DIRETORIOEXERCICIO / SAIDA
 
 ##criando as pastas
 
@@ -62,8 +62,6 @@ def criaPastas(qual=False):
     CRIA DIRETÓRIOS - os.makedirs
     os.makedirs(NOME_DA_PASTA, exist_ok=True) - exist_ok=True Evita erro caso a pasta já exista.
     """
-    
-    
 
 
 # Exercício 1  
@@ -83,7 +81,7 @@ def criarArquivo(): #inserir variável para definir extensão
     with open( nomeDoArquivo,"w", encoding="utf-8" ) as arquivo: #abre para escrita w = "write"
 
         arquivo.write(conteudo) #escreve efetivamente
-        conteudo = arquivo.read() #lê o conteúdo, depois de escrito, para confirmar se escreveu
+        #conteudo = arquivo.read() #lê o conteúdo, depois de escrito, para confirmar se escreveu
 
     print("\nArquivo criado com sucesso.")
     print(f"Conteúdo do arquivo:\n{conteudo}")
@@ -100,8 +98,9 @@ def lerArquivo():
     """
 
     nome = input("Informe o nome do arquivo: ")
+    caminhoArquivo = DIRETORIOEXERCICIO / nome
 
-    if not os.path.exists(nome):
+    if not caminhoArquivo.exists():
         print("Arquivo não encontrado.")
         return
 
@@ -129,12 +128,11 @@ def adicionarConteudo():
 
     """
 
-    nome = input("Diga o nome do arquivo que vai ser adicionado o conteúdo: ")
+    nome = input("Diga o nome do arquivo no qual vai ser adicionado o conteúdo: ")
 
-    if not os.path.exists(nome): #verifica se o caminho e arquivo existem
+    if not  os.path.exists(nome): #verifica se o caminho e arquivo existem
         print("Arquivo não encontrado.")
         return
-
     texto = input("Texto que deseja adicionar: ")
 
     with open(nome,"a", encoding="utf-8") as arquivo:
@@ -157,17 +155,17 @@ def procuraConteudo():
         Verifica se um texto existe dentro de outro.
 
     """
+    listarArquivos()
 
     nome = input("Informe o nome do arquivo: ")
 
 
-    if not os.path.exists(nome):
+    if not DIRETORIOEXERCICIO.exists(nome):
         print("Arquivo não encontrado.")
         return
 
 
     termo = input("Digite o termo que deseja procurar: ")
-
 
     with open(nome,"r", encoding="utf-8") as arquivo:
         linhas = arquivo.readlines()
@@ -186,7 +184,7 @@ def procuraConteudo():
 
     if not encontrado:
 
-        print("Nenhuma ocorrência encontrada.")
+        print(F"O TRECHO {termo} FÃO FOI ENCONTRADO NO ARQUIVO {arquivo}.")
 
  
 # Exercício 5  
@@ -226,6 +224,8 @@ def listarArquivos(tipo=False,pasta=False): #extensão (pdf / txt)
                 criaPastas(qual="txt")
 
             arquivos = os.listdir(PASTA_SAIDA)
+    else:
+        arquivos=os.listdir(DIRETORIOEXERCICIO)
 
 
     print(f"\nARQUIVOS {tipo}\n")
@@ -233,22 +233,15 @@ def listarArquivos(tipo=False,pasta=False): #extensão (pdf / txt)
     encontrou = False
 
     for arquivo in arquivos:
+        i=1
 
-        if arquivo.lower().endswith(tipo): #tipo
-
-            print(
-                "-",
-                arquivo
-            )
-
+        if arquivo.lower().endswith(tipo): #tipo    
+            print(f" Nº {i}",arquivo)
+            i+=1
             encontrou = True
 
-
     if not encontrou:
-
-        print(
-            "Nenhum PDF encontrado."
-        )
+        print(f"Nenhum arquivo {tipo.upper()} encontrado.")
 
 
 # Exercício 6  
@@ -331,20 +324,38 @@ while True:
     opcao=input("""
 MENU DE OPÇÕES:
 ººººººººººººººººººººººº
-1- CRIAR AS PASTAS PARA OS EXERCÍCIOS
-2- CRIAR UM ARQUIVO DE TEXTO                
-3- LER O CONTEÚDO DE UM ARQUIVO
-4-                 
+0-  CRIAR AS PASTAS PARA OS EXERCÍCIOS
+1-  CRIAR UM ARQUIVO DE TEXTO                
+2-  LER O CONTEÚDO DE UM ARQUIVO
+3-  ESCREVER NO ARQUIVO
+4-  PROCURAR UMA PARAVRA EM UM ARQUIVO
+5-  LISTAR ARQUIVOS EM UMA PASTA
+6-  PROCURAR UM ARQUIVO EM UMA PASTA
+7-  PDF - INFORMAÇÕES SOBRE UM ARQUIVO
+8-  PDF - EXTARAIR UMSA OCORRÊNCIA E INGFORMAR ONDE
+9-  PDF - PROCURAR UMA OCORRÊNCIA   
+10- PDF - SELECIONAR UMA PÁGINA E CRIAR OUTRO ARQUIVO COM ELA
+11- PDF - SELECIONAR VÁRIOS ARQUIVOS , E JUNTÁ-LOS EM UM SÓ ARQUIVO
+12- PDF - GERAR UM CERTIFICADO
+13- PDF - GRRAR UM CONTRATO           
 
 \n-> DIGITE SUA OPÇÃO: """)
     match opcao:
-        case "1":
+        case "0":
             print("VAMOS CRIAR AS PASTAS PARA OS EXERCÍCIOS")
             criaPastas()
             print("use ENTER para voltar ao menu")
-        case "2":
+        case "1":
             print("VAMOS CRIAR UM ARQUIVO DE TEXTO")
             criarArquivo()
+        case "2":
+            print("VAMOS LER UM ARQUIVO DE TEXTO")
+            lerArquivo()
+        case "3" :
+            print("escrever em um arquivo")
+            adicionarConteudo()
+        case "3":
+            procuraConteudo()
         case "5":
             print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
             listarArquivos("pdf")
