@@ -4,6 +4,7 @@
 # pip install reportlab
 # pip install PyMuPDF
 import os
+from pathlib import Path
 from pypdf import (
     PdfReader,
     PdfWriter
@@ -27,23 +28,42 @@ from reportlab.pdfgen import canvas
 # programa. 
 # O programa deverá trabalhar com arquivos .txt, .pdf e imagens utilizadas no 
 # processo de OCR. 
-ARQUIVO_TEXTO = "dados.txt"
-PASTA_PDFS = "pdfs"
-PASTA_SAIDA = "saida"
-ARQUIVO_CERTIFICADO = "certificado.pdf"
-ARQUIVO_CONTRATO = "contrato.pdf" 
+ARQUIVO_TESTE = "dados.txt"
+PDFS = "pdfs"
+SAIDA = "saida"
+CERTIFICADO = "certificado.pdf"
+CONTRATO = "contrato.pdf"
+
+#CRIAR DENTRO DA PASTA DO EXERCÍCIO
+DIRETORIOEXERCICIO = Path(__file__).resolve().parent #pasta do exercício [excel]
+CERIFICADO = DIRETORIOEXERCICIO / CERTIFICADO
+CONTRATO = DIRETORIOEXERCICIO / CONTRATO
+PASTA_PDFS = DIRETORIOEXERCICIO / PDFS 
+PASTA_SAIDA = DIRETORIOEXERCICIO / SAIDA 
 
 ##criando as pastas
 
-def criaPastas():
+def criaPastas(qual=False):
+    if qual:
+        qual=qual.lower()
+        if qual=="pdf":
+            os.makedirs(PASTA_PDFS, exist_ok=True)
+        elif qual=="txt":
+            os.makedirs(PASTA_SAIDA, exist_ok=True)
+        else:
+            qual=qual.upper()
+            qualPasta = f"PASTA_{qual}"
+            os.makedirs(DIRETORIOEXERCICIO / qualPasta, exist_ok=True)
+    else:
+        os.makedirs(PASTA_PDFS, exist_ok=True)
+        os.makedirs(PASTA_SAIDA, exist_ok=True)
+    
     """ 
     CRIA DIRETÓRIOS - os.makedirs
     os.makedirs(NOME_DA_PASTA, exist_ok=True) - exist_ok=True Evita erro caso a pasta já exista.
     """
-
-    os.makedirs(PASTA_PDFS, exist_ok=True)
-
-    os.makedirs(PASTA_SAIDA, exist_ok=True)
+    
+    
 
 
 # Exercício 1  
@@ -51,19 +71,22 @@ def criaPastas():
 # O usuário deverá informar o nome do arquivo e o conteúdo que será armazenado. 
 # O arquivo deverá ser criado utilizando codificação UTF-8. 
 def criarArquivo(): #inserir variável para definir extensão
-    nomeDoArquivo = input("Dê um nome para o arquivo: ")
+    nomeDoArquivo = input("Dê um nome para o arquivo de texto (.txt): ")
 
     if not nomeDoArquivo.endswith(".txt"): # .endswith() extensão do arquivo 
-        nomeDoArquivo += ".txt"
+        nomeDoArquivo += ".txt" #SE NÃO ESTIVER, INSERE A EXTENSÃO
+        nomeDoArquivo=DIRETORIOEXERCICIO / nomeDoArquivo 
     
     conteudo = input(f"Escreva algo no arquivo {nomeDoArquivo}: ")
 
 
-    with open( nomeDoArquivo,"w", encoding="utf-8" ) as arquivo:
+    with open( nomeDoArquivo,"w", encoding="utf-8" ) as arquivo: #abre para escrita w = "write"
 
-        arquivo.write(conteudo)
+        arquivo.write(conteudo) #escreve efetivamente
+        conteudo = arquivo.read() #lê o conteúdo, depois de escrito, para confirmar se escreveu
 
     print("\nArquivo criado com sucesso.")
+    print(f"Conteúdo do arquivo:\n{conteudo}")
     
   
 # Exercício 2  
@@ -100,7 +123,7 @@ def adicionarConteudo():
 
     Utiliza:
 
-        mode="a"
+        mode="a" = append()
             Abre o arquivo para adicionar conteúdo
             sem apagar o conteúdo existente.
 
@@ -172,7 +195,7 @@ def procuraConteudo():
 # Caso a pasta não exista, ela deverá ser criada automaticamente. 
 # Caso não existam arquivos PDF, o programa deverá informar ao usuário. 
 
-def listarArquivos(tipo): #extensão (pdf / txt)
+def listarArquivos(tipo=False,pasta=False): #extensão (pdf / txt)
     """
     Lista os arquivos existentes na pasta.
 
@@ -185,21 +208,29 @@ def listarArquivos(tipo): #extensão (pdf / txt)
             Verifica a extensão dos arquivos.
 
     """
-    tipo = "."+tipo
+    if tipo:
+        tipo = "."+tipo.lower()
+    
+        if tipo==".pdf":
+            pasta=PASTA_PDFS
+    
+            if not pasta:
+                criaPastas(qual="pdf")
 
-    criaPastas()
+            arquivos = os.listdir(PASTA_PDFS)
+        
+        if tipo==".txt":
+            pasta=PASTA_PDFS
+    
+            if not pasta:
+                criaPastas(qual="txt")
+
+            arquivos = os.listdir(PASTA_SAIDA)
 
 
-    arquivos = os.listdir(
-        PASTA_PDFS
-    )
-
-
-    print("\nARQUIVOS PDF\n")
-
+    print(f"\nARQUIVOS {tipo}\n")
 
     encontrou = False
-
 
     for arquivo in arquivos:
 
@@ -310,7 +341,12 @@ MENU DE OPÇÕES:
         case "1":
             print("VAMOS CRIAR AS PASTAS PARA OS EXERCÍCIOS")
             criaPastas()
+            print("use ENTER para voltar ao menu")
+        case "2":
+            print("VAMOS CRIAR UM ARQUIVO DE TEXTO")
+            criarArquivo()
         case "5":
+            print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
             listarArquivos("pdf")
         case "6":
             print("fim")

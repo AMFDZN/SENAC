@@ -12,9 +12,13 @@ import re #regex para filtrar as entradas usando letras e números
 import os
 from pathlib import Path
 
+
 NOMEDOARQUIVO = "planilha_openpyxl.xlsx"
+NOMEDOARQUIVO2="planilha_pd_openPy.xlsx"
 DIRETORIOEXERCICIO = Path(__file__).resolve().parent #pasta do exercício [excel]
 ARQUIVO = DIRETORIOEXERCICIO / NOMEDOARQUIVO
+ARQUIVO2 = DIRETORIOEXERCICIO / NOMEDOARQUIVO2
+
 
 #decorativos
 LINHA="══════════════════════════"
@@ -62,7 +66,7 @@ def verificaArquivo(avisar=True):
 # produtos. 
 # A planilha deverá possuir informações de produto, quantidade e preço. 
 # Adicione alguns registros de exemplo e salve o arquivo no formato .xlsx. 
-def criaPlanilha():
+def criaPlanilha():        
     #verifica se a planilha já existe e questiona se qquer subscrever
         if verificaArquivo(avisar=False):
             criaNovamente = input(f"{LINHA}\n{ATENCAO} Atenção: A planilha '{NOMEDOARQUIVO}' já existe!\nEstá na pasta do exercício ({DIRETORIOEXERCICIO})\n{LI} Tem certeza que quer criá-la novamente com os dados iniciais de teste?\n (s/n): ")
@@ -1095,7 +1099,7 @@ def formataTabela3(oq="top", color="darkOrange", corTexto="#333333", backgroundC
     planilha.save(ARQUIVO)
     print(f"{OK} Missão: {oq} executada com sucesso!")
 
-def menuPersonalizarCabecalho():
+def personalizarCabecalho():
     """Menu interativo para coletar preferências de estilo do cabeçalho antes de aplicar."""
     print(f"\n{LINHA}\n--- PERSONALIZAÇÃO DO CABEÇALHO ---")
     
@@ -1243,7 +1247,49 @@ def mesclarTitulo():
 # Exercício 23 
 # Crie uma função que transforme os dados existentes em uma tabela formatada do 
 # Excel. 
+def criaPlanilhaPd():
+    import pandas as pd
+    from openpyxl.utils.dataframe import dataframe_to_rows
+    df = pd.DataFrame(
+        {
 
+        "Produto": [
+            "Notebook",
+            "Mouse",
+            "Teclado",
+            "Monitor"
+        ],
+
+        "Quantidade": [
+            10,
+            35,
+            20,
+            8
+        ],
+
+        "Preço": [
+            3500,
+            80,
+            150,
+            1200
+        ]
+
+    }
+    )
+    
+    planilha = Workbook()
+    aba = planilha.active
+
+    for r in dataframe_to_rows(df, index=True, header=True):
+        aba.append(r)
+
+    for cell in aba['A'] + aba[1]:
+        cell.style = 'Pandas'
+
+    planilha.save(ARQUIVO2)
+    
+    
+            
 def converterParaTabelaExcel():
     planilha = abrePlanilha()
     if planilha is None: return
@@ -1260,7 +1306,7 @@ def converterParaTabelaExcel():
 
     aba.add_table(tabela)
 
-    planilha.save(ARQUIVO)
+    planilha.save(ARQUIVO2)
     print(f"{OK} Intervalo convertido em Tabela nativa do Excel estilo TabelaProdutos.")
  
 # Exercício 24 
@@ -1308,7 +1354,7 @@ def gerarGrafico():
 # O relatório deverá: criar uma área de apresentação, organizar os dados dos 
 # produtos, aplicar formatação, calcular informações automaticamente, ajustar a 
 # visualização da planilha e gerar um arquivo pronto para apresentação.  
-def gerarRelatorioAutomatizado():
+def gerarRelatorio():
     print(f"\n--- INICIANDO AUTOMAÇÃO COMPLETA DO RELATÓRIO ---")
     criaPlanilha()
     calcularTotalProduto()
@@ -1354,7 +1400,7 @@ while True:
 19 - APLICAR BORDAS
 20 - AJUSTAR O TAMANHO DAS COLUNAS
 21 - MISTURAR CÉLULAS PARA CRIAR UM TÍTULO
-22 - FAZER O CABEÇALHO FICAR INVISÍVEL
+22 - FAZER O CABEÇALHO FICAR FIXO
 23 - APLICAR FILTROS
 24 - TRANSFORMAR DADOS EM UMA PLANILHA FORMATADA
 25 - GERAR UM GRÁFICO
@@ -1488,13 +1534,13 @@ while True:
         case "21":
             
                 print("MESCLAR CÉLULAS DA TABELA\n")
-                #formataTabela(oq="top", case="2")
+                mesclarTitulo()
                 input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "22":
             
                 print("OCULTAR O CABEÇALHO DA TABELA\n")
-                #formataTabela(oq="top", case="2")
+                formataTabela3(oq="congelar")
                 input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "23":                                    
@@ -1506,19 +1552,20 @@ while True:
         case "24":
             
                 print("TRANSFORMAR DADOS EM UMA PLANILHA\n")
-                criaPlanilha(oq="nova")
+                #converterParaTabelaExcel()
+                criaPlanilhaPd()
                 input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "25":                        
             
                 print("VAMOS GERAR UM GRÁFICO DA TABELA\n")
-                #geraGrafico(aba="0",tipo="barras")
+                gerarGrafico(aba="0",tipo="barras")
                 input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "26":
             
                 print("VAMOS GERAR UM RELATÓRIO(DASHBOARD) DA TABELA\n")
-                #geraDashboard(aba=0,tipo="1")
+                gerarRelatorio()
                 input(f"{LINHAZINHA}\n{LI} Clique ENTER para voltar ao menu\n")            
             
         case "27":
