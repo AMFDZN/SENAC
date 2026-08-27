@@ -41,6 +41,15 @@ CONTRATO = DIRETORIOEXERCICIO / CONTRATO
 PASTA_PDFS = DIRETORIOEXERCICIO / PDFS 
 PASTA_SAIDA = DIRETORIOEXERCICIO / SAIDA
 
+#decorativos
+LINHA="══════════════════════════"
+LINHAZINHA="┅ ┅ ┅ ┅ ┅ ┅ ┅ ┅ ┅ ┅ ┅ ┅"
+OK="[✔]"
+ERRO="[✕]"
+ATENCAO="[⚠]"
+LI="➤"
+MUDOU="[⇄]"
+
 ##criando as pastas
 
 def criaPastas(qual=False):
@@ -48,15 +57,19 @@ def criaPastas(qual=False):
         qual=qual.lower()
         if qual=="pdf":
             os.makedirs(PASTA_PDFS, exist_ok=True)
+            print(f"{OK} Pasta {qual} criada!")
         elif qual=="txt":
             os.makedirs(PASTA_SAIDA, exist_ok=True)
+            print(f"{OK} Pasta {qual} criada!")
         else:
-            qual=qual.upper()
-            qualPasta = f"PASTA_{qual}"
-            os.makedirs(DIRETORIOEXERCICIO / qualPasta, exist_ok=True)
+            #qual=qual.upper()
+            #qualPasta = qual
+            os.makedirs(DIRETORIOEXERCICIO / qual, exist_ok=True)
+            print(f"{OK} Pasta {qual} criada!")
     else:
         os.makedirs(PASTA_PDFS, exist_ok=True)
         os.makedirs(PASTA_SAIDA, exist_ok=True)
+        print(f"{OK} Pastas {PASTA_PDFS} e {PASTA_SAIDA} criada!")
     
     """ 
     CRIA DIRETÓRIOS - os.makedirs
@@ -98,9 +111,9 @@ def lerArquivo():
     """
 
     nome = input("Informe o nome do arquivo: ")
-    caminhoArquivo = DIRETORIOEXERCICIO / nome
+    arquivo = DIRETORIOEXERCICIO / nome
 
-    if not caminhoArquivo.exists():
+    if not arquivo.exists():
         print("Arquivo não encontrado.")
         return
 
@@ -129,8 +142,8 @@ def adicionarConteudo():
     """
 
     nome = input("Diga o nome do arquivo no qual vai ser adicionado o conteúdo: ")
-
-    if not  os.path.exists(nome): #verifica se o caminho e arquivo existem
+    
+    if not os.path.exists(DIRETORIOEXERCICIO/nome): #verifica se o caminho e arquivo existem
         print("Arquivo não encontrado.")
         return
     texto = input("Texto que deseja adicionar: ")
@@ -155,17 +168,17 @@ def procuraConteudo():
         Verifica se um texto existe dentro de outro.
 
     """
-    listarArquivos()
+    #listarArquivos(tipo=False,pasta=False)
 
     nome = input("Informe o nome do arquivo: ")
 
 
-    if not DIRETORIOEXERCICIO.exists(nome):
-        print("Arquivo não encontrado.")
+    if not os.path.exists(DIRETORIOEXERCICIO/nome):
+        print(f"{ERRO} Arquivo não encontrado na pasta {DIRETORIOEXERCICIO}")
         return
 
 
-    termo = input("Digite o termo que deseja procurar: ")
+    termo = input("Digite o trecho que deseja procurar: ")
 
     with open(nome,"r", encoding="utf-8") as arquivo:
         linhas = arquivo.readlines()
@@ -194,6 +207,9 @@ def procuraConteudo():
 # Caso não existam arquivos PDF, o programa deverá informar ao usuário. 
 
 def listarArquivos(tipo=False,pasta=False): #extensão (pdf / txt)
+    if not pasta:
+        pasta=DIRETORIOEXERCICIO
+        
     """
     Lista os arquivos existentes na pasta.
 
@@ -213,19 +229,19 @@ def listarArquivos(tipo=False,pasta=False): #extensão (pdf / txt)
             pasta=PASTA_PDFS
     
             if not pasta:
-                criaPastas(qual="pdf")
+                criaPastas(qual="pdfs")
 
             arquivos = os.listdir(PASTA_PDFS)
         
         if tipo==".txt":
-            pasta=PASTA_PDFS
+            pasta=PASTA_SAIDA
     
             if not pasta:
                 criaPastas(qual="txt")
 
             arquivos = os.listdir(PASTA_SAIDA)
     else:
-        arquivos=os.listdir(DIRETORIOEXERCICIO)
+        arquivos=os.listdir(pasta)
 
 
     print(f"\nARQUIVOS {tipo}\n")
@@ -241,13 +257,33 @@ def listarArquivos(tipo=False,pasta=False): #extensão (pdf / txt)
             encontrou = True
 
     if not encontrou:
-        print(f"Nenhum arquivo {tipo.upper()} encontrado.")
+        print(f"Nenhum arquivo [{tipo.lower()}] encontrado NA PASTA [{pasta}].")
 
 
 # Exercício 6  
 # Crie uma função que permita verificar se determinado arquivo PDF existe. 
 # Caso o arquivo não exista, o programa deverá informar o usuário e impedir que as 
 # demais operações sejam executadas sobre esse arquivo. 
+
+def procuraArquivo(tipo=False):
+    pastas=os.listdir()
+    print(f"As pastas no nosso diretório de exercícios são estas\n{pastas}")
+    qualPasta=input("Informe a pasta em que queres procurar o arquivo PDF:\n")
+    if not qualPasta:
+        print(f"A pasta {qualPasta} não foi encontrada")
+        return
+    else:
+        qualArquivo=input("Informe o nome do arquivo PDF: ")
+        arquivo = qualPasta / qualArquivo
+
+    if not arquivo.exists():
+        print("Arquivo não encontrado.")
+        return
+    else:
+        print(f"Arquivo {qualArquivo} encontrado")
+        
+            
+    
  
 # Exercício 7  
 # Crie uma função que abra um arquivo PDF existente e apresente informações 
@@ -344,20 +380,59 @@ MENU DE OPÇÕES:
         case "0":
             print("VAMOS CRIAR AS PASTAS PARA OS EXERCÍCIOS")
             criaPastas()
-            print("use ENTER para voltar ao menu")
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "1":
             print("VAMOS CRIAR UM ARQUIVO DE TEXTO")
             criarArquivo()
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "2":
             print("VAMOS LER UM ARQUIVO DE TEXTO")
             lerArquivo()
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "3" :
             print("escrever em um arquivo")
             adicionarConteudo()
-        case "3":
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
+        case "4":
+            print("PROCURAR UMA SENTENÇA EM UM TEXTO")
             procuraConteudo()
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "5":
             print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
-            listarArquivos("pdf")
+            listarArquivos(tipo="pdf")
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "6":
+            print("PROCURAR UM ARQUIVO NA PASTA [pdfs]")
+            procuraArquivo(tipo="pdf")
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
+        case "7":
+            print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
+            listarArquivos("pdf")
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
+        case "8":
+            print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
+            listarArquivos("pdf")
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
+        case "9":
+            print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
+            listarArquivos("pdf")
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
+        case "10":
+            print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
+            listarArquivos("pdf")
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
+        case "11":
+            print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
+            listarArquivos("pdf")
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
+        case "12":
+            print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
+            listarArquivos("pdf")
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
+        case "13":
+            print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
+            listarArquivos("pdf")
+            input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
+
+        case "14":
             print("fim")
