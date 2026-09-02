@@ -15,6 +15,7 @@ from PIL import Image
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
+
 # Instrução Geral 
 # Crie um programa em Python que funcione como um menu de opções. 
 # O usuário deverá escolher uma opção do menu e cada opção deverá executar um 
@@ -41,6 +42,11 @@ CONTRATO = DIRETORIOEXERCICIO / CONTRATO
 PASTA_PDFS = DIRETORIOEXERCICIO / PDFS 
 PASTA_SAIDA = DIRETORIOEXERCICIO / SAIDA
 
+#funções
+import sys
+sys.path.append(str(Path(__file__).parent))
+from funcoes import *
+
 #decorativos
 LINHA="══════════════════════════"
 LINHAZINHA="┅ ┅ ┅ ┅ ┅ ┅ ┅ ┅ ┅ ┅ ┅ ┅"
@@ -50,311 +56,6 @@ ATENCAO="[⚠]"
 LI="➤"
 MUDOU="[⇄]"
 
-##criando as pastas
-
-def criaPastas(qual=False):
-    if qual:
-        qual=qual.lower()
-        if qual=="pdf":
-            os.makedirs(PASTA_PDFS, exist_ok=True)
-            print(f"{OK} Pasta {qual} criada!")
-        elif qual=="txt":
-            os.makedirs(PASTA_SAIDA, exist_ok=True)
-            print(f"{OK} Pasta {qual} criada!")
-        else:
-            #qual=qual.upper()
-            #qualPasta = qual
-            os.makedirs(DIRETORIOEXERCICIO / qual, exist_ok=True)
-            print(f"{OK} Pasta {qual} criada!")
-    else:
-        os.makedirs(PASTA_PDFS, exist_ok=True)
-        os.makedirs(PASTA_SAIDA, exist_ok=True)
-        print(f"{OK} Pastas {PASTA_PDFS} e {PASTA_SAIDA} criada!")
-    
-    """ 
-    CRIA DIRETÓRIOS - os.makedirs
-    os.makedirs(NOME_DA_PASTA, exist_ok=True) - exist_ok=True Evita erro caso a pasta já exista.
-    """
-
-
-# Exercício 1  
-# Crie uma função que permita ao usuário criar um novo arquivo de texto. 
-# O usuário deverá informar o nome do arquivo e o conteúdo que será armazenado. 
-# O arquivo deverá ser criado utilizando codificação UTF-8. 
-def criarArquivo(): #inserir variável para definir extensão
-    nomeDoArquivo = input("Dê um nome para o arquivo de texto (.txt): ")
-
-    if not nomeDoArquivo.endswith(".txt"): # .endswith() extensão do arquivo 
-        nomeDoArquivo += ".txt" #SE NÃO ESTIVER, INSERE A EXTENSÃO
-        nomeDoArquivo=DIRETORIOEXERCICIO / nomeDoArquivo 
-    
-    conteudo = input(f"Escreva algo no arquivo {nomeDoArquivo}: ")
-
-
-    with open( nomeDoArquivo,"w", encoding="utf-8" ) as arquivo: #abre para escrita w = "write"
-
-        arquivo.write(conteudo) #escreve efetivamente
-        #conteudo = arquivo.read() #lê o conteúdo, depois de escrito, para confirmar se escreveu
-
-    print("\nArquivo criado com sucesso.")
-    print(f"Conteúdo do arquivo:\n{conteudo}")
-    
-  
-# Exercício 2  
-# Crie uma função que permita abrir um arquivo de texto existente e apresentar seu 
-# conteúdo na tela. 
-# Antes de realizar a leitura, o programa deverá verificar se o arquivo existe. 
-def lerArquivo(): 
-    """
-        open() - Abre o arquivo.
-        read() - Lê todo o conteúdo.
-    """
-
-    nome = input("Informe o nome do arquivo: ")
-    arquivo = DIRETORIOEXERCICIO / nome
-
-    if not arquivo.exists():
-        print("Arquivo não encontrado.")
-        return
-
-    with open(nome,"r",encoding="utf-8") as arquivo:
-
-        conteudo = arquivo.read()
-
-    print("\nCONTEÚDO DO ARQUIVO\n")
-    print(conteudo)
-  
-# Exercício 3  
-# Crie uma função que permita adicionar novas informações ao final de um arquivo 
-# de texto existente. 
-# O conteúdo existente não deverá ser apagado. 
- 
-def adicionarConteudo():
-    """
-    Adiciona conteúdo ao final de um arquivo de texto.
-
-    Utiliza:
-
-        mode="a" = append()
-            Abre o arquivo para adicionar conteúdo
-            sem apagar o conteúdo existente.
-
-    """
-
-    nome = input("Diga o nome do arquivo no qual vai ser adicionado o conteúdo: ")
-    
-    if not os.path.exists(DIRETORIOEXERCICIO/nome): #verifica se o caminho e arquivo existem
-        print("Arquivo não encontrado.")
-        return
-    texto = input("Texto que deseja adicionar: ")
-
-    with open(nome,"a", encoding="utf-8") as arquivo:
-
-        arquivo.write("\n" + texto)
-
-    print("Texto adicionado com sucesso.")
- 
-# Exercício 4  
-# Crie uma função que permita procurar uma palavra ou expressão dentro de um 
-# arquivo de texto. 
-# O programa deverá informar em quais linhas o termo pesquisado foi encontrado. 
-# A pesquisa deverá ignorar diferenças entre letras maiúsculas e minúsculas. 
-def procuraConteudo():
-    """
-    Procura um trecho de texto  dentro do arquivo.
-
-    Utiliza:
-        in
-        Verifica se um texto existe dentro de outro.
-
-    """
-    #listarArquivos(tipo=False,pasta=False)
-
-    nome = input("Informe o nome do arquivo: ")
-
-
-    if not os.path.exists(DIRETORIOEXERCICIO/nome):
-        print(f"{ERRO} Arquivo não encontrado na pasta {DIRETORIOEXERCICIO}")
-        return
-
-
-    termo = input("Digite o trecho que deseja procurar: ")
-
-    with open(nome,"r", encoding="utf-8") as arquivo:
-        linhas = arquivo.readlines()
-
-    encontrado = False
-    print("\nRESULTADOS\n")
-
-
-    for numero, linha in enumerate(linhas,start=1): #numero é o índice
-
-        if termo.lower() in linha.lower():
-
-            print(f"Linha {numero}: {linha.strip()}")
-
-            encontrado = True
-
-    if not encontrado:
-
-        print(F"O TRECHO {termo} FÃO FOI ENCONTRADO NO ARQUIVO {arquivo}.")
-
- 
-# Exercício 5  
-# Crie uma função que liste todos os arquivos com extensão .pdf existentes em uma 
-# pasta específica. 
-# Caso a pasta não exista, ela deverá ser criada automaticamente. 
-# Caso não existam arquivos PDF, o programa deverá informar ao usuário. 
-
-def listarArquivos(tipo=False,pasta=False): #extensão (pdf / txt)
-    if not pasta:
-        pasta=DIRETORIOEXERCICIO
-        
-    """
-    Lista os arquivos existentes na pasta.
-
-    Utiliza:
-
-        os.listdir()
-            Lista os arquivos de um diretório.
-
-        endswith()
-            Verifica a extensão dos arquivos.
-
-    """
-    if tipo:
-        tipo = "."+tipo.lower()
-    
-        if tipo==".pdf":
-            pasta=PASTA_PDFS
-    
-            if not pasta:
-                criaPastas(qual="pdfs")
-
-            arquivos = os.listdir(PASTA_PDFS)
-        
-        if tipo==".txt":
-            pasta=PASTA_SAIDA
-    
-            if not pasta:
-                criaPastas(qual="txt")
-
-            arquivos = os.listdir(PASTA_SAIDA)
-    else:
-        arquivos=os.listdir(pasta)
-
-
-    print(f"\nARQUIVOS {tipo}\n")
-
-    encontrou = False
-
-    for arquivo in arquivos:
-        i=1
-
-        if arquivo.lower().endswith(tipo): #tipo    
-            print(f" Nº {i}",arquivo)
-            i+=1
-            encontrou = True
-
-    if not encontrou:
-        print(f"Nenhum arquivo [{tipo.lower()}] encontrado NA PASTA [{pasta}].")
-
-
-# Exercício 6  
-# Crie uma função que permita verificar se determinado arquivo PDF existe. 
-# Caso o arquivo não exista, o programa deverá informar o usuário e impedir que as 
-# demais operações sejam executadas sobre esse arquivo. 
-
-def procuraArquivo(tipo=False):
-    pastas=os.listdir()
-    print(f"As pastas no nosso diretório de exercícios são estas\n{pastas}")
-    qualPasta=input("Informe a pasta em que queres procurar o arquivo PDF:\n")
-    if not qualPasta:
-        print(f"A pasta {qualPasta} não foi encontrada")
-        return
-    else:
-        qualArquivo=input("Informe o nome do arquivo PDF: ")
-        arquivo = qualPasta / qualArquivo
-
-    if not arquivo.exists():
-        print("Arquivo não encontrado.")
-        return
-    else:
-        print(f"Arquivo {qualArquivo} encontrado")
-        
-            
-    
- 
-# Exercício 7  
-# Crie uma função que abra um arquivo PDF existente e apresente informações 
-# básicas sobre ele. 
-# O programa deverá apresentar pelo menos: 
-# nome ou caminho do arquivo;  
-# quantidade de páginas.  
- 
-# Exercício 8  
-# Crie uma função que permita extrair o texto existente em um arquivo PDF. 
-# O programa deverá percorrer todas as páginas e apresentar o conteúdo 
-# encontrado, identificando o número de cada página. 
- 
- 
-# Exercício 9  
-# Crie uma função que permita procurar uma palavra ou expressão dentro de um 
-# arquivo PDF. 
-# O programa deverá informar em quais páginas o termo pesquisado foi encontrado. 
-# A pesquisa deverá ignorar diferenças entre letras maiúsculas e minúsculas. 
- 
-# Exercício 10  
-# Crie uma função que permita selecionar uma página específica de um arquivo 
-# PDF e gerar um novo arquivo contendo somente essa página. 
-# O usuário deverá informar: o arquivo PDF;  o número da página; o nome do novo 
-# arquivo.  
- 
-# Exercício 11  
-# Crie uma função que permita selecionar dois ou mais arquivos PDF e juntar todas 
-# as páginas em um único arquivo PDF. 
-# O usuário deverá informar os arquivos que deseja mesclar. 
-# O programa deverá verificar se os arquivos existem e se possuem extensão .pdf. 
- 
-# Exercício 12  
-# Crie uma função que gere automaticamente um certificado em PDF. 
-# O usuário deverá informar: nome do participante; nome do curso;  carga horária; 
-# data. O certificado deverá possuir uma apresentação visual organizada e ser salvo 
-# na pasta de saída.  
- 
-# Exercício 13  
-# Crie uma função que gere automaticamente um contrato de prestação de serviços 
-# em PDF.O usuário deverá informar: nome do contratante;  nome do contratado; 
-# descrição do serviço;  valor do contrato;  data.  
-# O documento deverá apresentar as informações de maneira organizada e possuir 
-# espaço para assinatura das partes. 
- 
-# Exercício 14  
-# Crie uma função que permita configurar o caminho do executável do Tesseract. 
-# Em seguida, crie uma função que permita selecionar uma imagem e realizar o 
-# reconhecimento óptico dos caracteres presentes nela. 
-# O texto reconhecido deverá ser apresentado na tela. 
- 
-# Exercício 15  
-# Crie uma função que permita realizar OCR em um arquivo PDF. 
-# O programa deverá transformar cada página do PDF em uma imagem e utilizar o 
-# Tesseract para reconhecer o texto existente. 
-# O resultado deverá ser apresentado na tela, identificando cada página. 
- 
-# Exercício 16  
-# Crie uma função que verifique se um arquivo PDF possui proteção por senha. 
-# A senha deverá ser obtida por meio de uma variável de ambiente  
-# O programa não deverá armazenar a senha diretamente no código. 
-# Caso o PDF esteja protegido, o programa deverá tentar realizar a descriptografia 
-# utilizando a senha armazenada na variável de ambiente e informar se a senha foi 
-# aceita ou recusada. 
- 
-# Exercício 17  
-# Crie uma função que apresente as configurações relacionadas à variável de 
-# ambiente utilizada pelo programa. 
-# Por questões de segurança, a senha nunca deverá ser exibida. 
-# O programa deverá informar somente se a variável PDF_SENHA está configurada 
-# ou não.
 
 while True:
     opcao=input("""
@@ -368,7 +69,7 @@ MENU DE OPÇÕES:
 5-  LISTAR ARQUIVOS EM UMA PASTA
 6-  PROCURAR UM ARQUIVO EM UMA PASTA
 7-  PDF - INFORMAÇÕES SOBRE UM ARQUIVO
-8-  PDF - EXTARAIR UMSA OCORRÊNCIA E INGFORMAR ONDE
+8-  PDF - EXTARAIR UMA OCORRÊNCIA E INGFORMAR ONDE
 9-  PDF - PROCURAR UMA OCORRÊNCIA   
 10- PDF - SELECIONAR UMA PÁGINA E CRIAR OUTRO ARQUIVO COM ELA
 11- PDF - SELECIONAR VÁRIOS ARQUIVOS , E JUNTÁ-LOS EM UM SÓ ARQUIVO
@@ -383,13 +84,13 @@ MENU DE OPÇÕES:
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "1":
             print("VAMOS CRIAR UM ARQUIVO DE TEXTO")
-            criarArquivo()
+            criarArquivo(nomeDoArquivo=False)
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "2":
             print("VAMOS LER UM ARQUIVO DE TEXTO")
             lerArquivo()
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
-        case "3" :
+        case "3":
             print("escrever em um arquivo")
             adicionarConteudo()
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
@@ -406,8 +107,8 @@ MENU DE OPÇÕES:
             procuraArquivo(tipo="pdf")
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "7":
-            print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
-            listarArquivos("pdf")
+            print("VAMOS LISTAR INFORMAÇÕES DE UM ARQUIVO [pdf]")
+            verPdf()
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "8":
             print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
@@ -426,8 +127,9 @@ MENU DE OPÇÕES:
             listarArquivos("pdf")
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "12":
-            print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
-            listarArquivos("pdf")
+            print("VAMOS CRIR UM CERTIFICADO NA PASTA [pdfs]")
+            criaCertificado()
+            
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "13":
             print("VAMOS LISTAR OS ARQUIVOS [pdfs]")
@@ -435,4 +137,6 @@ MENU DE OPÇÕES:
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
 
         case "14":
-            print("fim")
+            print("CONFIGURAR O EXE")
+            configuraTesseract()
+            input(f"{LINHA}Use ENTER para voltar ao menu")
