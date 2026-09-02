@@ -5,15 +5,7 @@
 # pip install PyMuPDF
 import os
 from pathlib import Path
-from pypdf import (
-    PdfReader,
-    PdfWriter
-)
-import pdfplumber
-import pytesseract
-from PIL import Image
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
+
 
 
 # Instrução Geral 
@@ -58,7 +50,7 @@ MUDOU="[⇄]"
 
 
 while True:
-    opcao=input("""
+    opcao=input(f"""
 MENU DE OPÇÕES:
 ººººººººººººººººººººººº
 0-  CRIAR AS PASTAS PARA OS EXERCÍCIOS
@@ -75,7 +67,7 @@ MENU DE OPÇÕES:
 11- PDF - SELECIONAR VÁRIOS ARQUIVOS , E JUNTÁ-LOS EM UM SÓ ARQUIVO
 12- PDF - GERAR UM CERTIFICADO
 13- PDF - GRRAR UM CONTRATO           
-
+{LINHA}
 \n-> DIGITE SUA OPÇÃO: """)
     match opcao:
         case "0":
@@ -91,7 +83,7 @@ MENU DE OPÇÕES:
             lerArquivo()
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "3":
-            print("escrever em um arquivo")
+            print("ESCREVER EM UM ARQUIVO DE TEXTO")
             adicionarConteudo()
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
         case "4":
@@ -137,6 +129,6 @@ MENU DE OPÇÕES:
             input(f"{LINHAZINHA}\n{LI} Use ENTER para voltar ao menu")
 
         case "14":
-            print("CONFIGURAR O EXE")
+            print("CONFIGURAR O (Tesseract - ?)")
             configuraTesseract()
-            input(f"{LINHA}Use ENTER para voltar ao menu")
+            input(f"{LINHAZINHA}\n{LI}Use ENTER para voltar ao menu")
