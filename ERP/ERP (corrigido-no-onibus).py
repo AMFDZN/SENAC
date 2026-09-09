@@ -298,7 +298,7 @@ def mostraPlanilha2(mostraValores=False, qualAba=False, top=False):
             print(f"\n[Visualizar Alteração] Aba: {aba.title}")
             print(tabulate(linhas, headers=cabecalho, tablefmt="grid"))
         else:
-            print(f"\n[{NOMEDOARQUIVO}] Aba: {aba.title}")
+            print(f"\n[{NOMEDOARQUIVO2}] Aba: {aba.title}")
             print(tabulate(listaDados[1:], headers=cabecalho, tablefmt="grid"))
     else:
         print(f"{LINHAZINHA}\nABAS DA PLANILHA {NOMEDOARQUIVO}")
