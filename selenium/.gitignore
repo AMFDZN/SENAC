@@ -1,5 +1,5 @@
-env
 .env
+env
 #arquivos d teste e log
 *.xlsx
 *.txt
@@ -9,6 +9,4 @@ env
 .vscode/
 #pastas do de cache do python3, no linux
 *_pycache_
-_pycache_/
-*.pyc
 *.zip
