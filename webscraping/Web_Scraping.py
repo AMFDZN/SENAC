@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 import requests
+import os
 
 # ==========================================
 # CONSTANTES E DIRETÓRIOS DO PROJETO

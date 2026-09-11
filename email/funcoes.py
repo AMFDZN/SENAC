@@ -12,6 +12,7 @@ Bibliotecas utilizadas:
 import os
 import smtplib
 import datetime
+import getpass
 from pathlib import Path
 from openpyxl import Workbook, load_workbook
 from email.mime.multipart import MIMEMultipart
@@ -29,6 +30,22 @@ OK = "[✔]"
 ERRO = "[✕]"
 ATENCAO = "[⚠]"
 LI = "➤"
+
+def configuraRemetente():
+    
+    print("CONFIGURANDO O REMETENTE")
+    email = input("email: ")
+    senha = getpass.getpass("senha: ")
+    arquivo = open(CONFIG_SMTP,"w",encoding="utf-8")
+    
+    arquivo.write("email=" + email + "\nsenha=" + senha + "\n")
+    arquivo.close()
+    
+    print("\nConfig feito")
+    arquivo = open(CONFIG_SMTP,"r",encoding="utf-8")
+    conteudo = arquivo.read()
+    print(f"\nconteudo do arquivo {CONFIG_SMTP}\n{conteudo}")
+    
 
 
 def criarPlanilhaDestinatarios(caminhoArquivo):
@@ -131,8 +148,10 @@ def visualizarDestinatarios(caminhoArquivo):
     if workbook:
         planilha = workbook.active
         print("\n--- LISTA DE DESTINATÁRIOS CADASTRADOS ---")
+        i=1
         for linha in planilha.iter_rows(values_only=True):
-            print(f"Nome: {linha[0]} | E-mail: {linha[1]} | Empresa: {linha[2]} | Mensagem: {linha[3]}")
+            print(f"Nº{i} Nome: {linha[0]} | E-mail: {linha[1]} | Empresa: {linha[2]} | Mensagem: {linha[3]}")
+            i+=1
 
 
 def cadastrarDestinatario(caminhoArquivo, nome, email, empresa, mensagem):

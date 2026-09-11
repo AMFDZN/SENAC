@@ -7,6 +7,14 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+#para o Chrome no linux
+import re
+import subprocess
+import pytest
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.chrome.service import Service
+
 import requests
 
 URL_LOGIN = "https://the-internet.herokuapp.com/login"
@@ -15,26 +23,56 @@ USUARIO = "tomsmith"
 SENHA = "SuperSecretPassword!"
 
 def iniciar_navegador():
-    """
-    Inicia o navegador utilizando o Selenium WebDriver.
+    # 1. Configura as opções do Chrome
+        options = webdriver.ChromeOptions()
+    
+        # Caminho padrão onde o Flatpak expõe o executável do Chrome no sistema host
+        #options.binary_location = "~/.local/share/flatpak/app/com.google.Chrome/current/active/export/bin/com.google.Chrome"
+        #options.binary_location = "~/.local/share/flatpak/exports/bin/com.google.Chrome"
+        # Nota: Se foi instalado apenas para o seu usuário (--user), o caminho será:
+        # "~/.local/share/flatpak/exports/bin/com.google.Chrome"
+        #na minha máquina
+        ###/home/acelio/.local/share/flatpak/app/com.google.Chrome/current/active/files/bin/chrome
+        # ~/.local/share/flatpak/app/com.google.Chrome/current/active/files/bin/chrome
+    
+        # Argumentos recomendados para evitar problemas de permissões com a Sandbox do Flatpak
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+    
+        # 2. Inicializa o WebDriver
+        # O Selenium Manager baixará o ChromeDriver compatível automaticamente se você estiver usando o Selenium 4+
+        
+        #service = webdriver.ChromeService()
+        #driver = webdriver.Chrome(service=service)
+        driver = webdriver.Chrome(options=options)
+        
+        #driver = webdriver.Chrome()
+        driver.maximize_window()
+        return driver
+    
 
-    Utiliza:
+# def iniciar_navegador():
+#     """
+#     Inicia o navegador utilizando o Selenium WebDriver.
 
-        webdriver.Chrome()
-            Cria uma instância do Google Chrome.
+#     Utiliza:
 
-        maximize_window()
-            Maximiza a janela do navegador.
+#         webdriver.Chrome()
+#             Cria uma instância do Google Chrome.
 
-    Retorno:
+#         maximize_window()
+#             Maximiza a janela do navegador.
 
-        driver:
-            Objeto responsável pelo controle
-            do navegador.
-    """
-    driver = webdriver.Chrome()
-    driver.maximize_window()
-    return driver
+#     Retorno:
+
+#         driver:
+#             Objeto responsável pelo controle
+#             do navegador.
+#     """
+    
+#     driver = webdriver.Chrome()
+#     driver.maximize_window()
+#     return driver
 
 
 
@@ -296,6 +334,7 @@ def executar_navegacao():
     Executa o fluxo completo de navegação.
 
     Fluxo:
+        0- inicia lunux
 
         1 - Iniciar navegador.
         2 - Acessar página.
@@ -308,7 +347,8 @@ def executar_navegacao():
         9 - Encerrar navegador.
     """
 
-    driver = iniciar_navegador()
+    #driver = iniciar_navegador()
+    driver= iniciaLinux()
 
     try:
 
@@ -679,7 +719,7 @@ def menu():
 
 
 
-
+00- linux
 1 - Iniciar navegador
 2 - Acessar página
 3 - Realizar login
@@ -704,10 +744,18 @@ ROBÔ COMPLETO
         opcao = input(
             "Escolha uma opção: "
         )
+        
+        if opcao=="00":
+            driver=iniciaLinux()
+            acessar_pagina(driver,URL_LOGIN)
+            
+            input("\nPressione Enter para fechar.")
+            
+            driver.quit()
 
 
 
-        if opcao == "1":
+        elif opcao == "1":
 
             driver = iniciar_navegador()
 

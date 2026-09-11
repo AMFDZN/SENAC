@@ -36,6 +36,7 @@ while True:
     opcao = input(f"""
     MENU DE GERENCIAMENTO DE E-MAILS:
     ººººººººººººººººººººººº
+    00-  CONFIGURAR REMETENTE
     0-  CRIAR PLANILHA DE DESTINATÁRIOS
     1-  VERIFICAR EXISTÊNCIA DA PLANILHA
     2-  ABRIR PLANILHA EXISTENTE
@@ -52,6 +53,8 @@ while True:
     \n-> DIGITE SUA OPÇÃO: """)
     
     match opcao:
+        case "00":
+            configuraRemetente()
         case "0":
             print("VAMOS CRIAR A PLANILHA DE DESTINATÁRIOS")
             criarPlanilhaDestinatarios(CAMINHO_EXCEL)  # Chama a função correspondente
