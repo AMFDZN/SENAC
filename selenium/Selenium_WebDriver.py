@@ -8,71 +8,42 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-#para o Chrome no linux
-import re
-import subprocess
-import pytest
-# from selenium.webdriver.chrome.options import Options
-# from selenium.webdriver.chrome.service import Service
-
 import requests
+from dotenv import load_dotenv
+import os
+import time
+import urllib.robotparser
 
-URL_LOGIN = "https://the-internet.herokuapp.com/login"
-URL_API = "https://jsonplaceholder.typicode.com/users"
-USUARIO = "tomsmith"
-SENHA = "SuperSecretPassword!"
+load_dotenv()
+URL_LOGIN = os.getenv("URL_LOGIN")
+URL_API = os.getenv("URL_API")
+USUARIO = os.getenv("USUARIO")
+SENHA = os.getenv("SENHA")   
 
 def iniciar_navegador():
-    # 1. Configura as opções do Chrome
-        options = webdriver.ChromeOptions()
-    
-        # Caminho padrão onde o Flatpak expõe o executável do Chrome no sistema host
-        #options.binary_location = "~/.local/share/flatpak/app/com.google.Chrome/current/active/export/bin/com.google.Chrome"
-        #options.binary_location = "~/.local/share/flatpak/exports/bin/com.google.Chrome"
-        # Nota: Se foi instalado apenas para o seu usuário (--user), o caminho será:
-        # "~/.local/share/flatpak/exports/bin/com.google.Chrome"
-        #na minha máquina
-        ###/home/acelio/.local/share/flatpak/app/com.google.Chrome/current/active/files/bin/chrome
-        # ~/.local/share/flatpak/app/com.google.Chrome/current/active/files/bin/chrome
-    
-        # Argumentos recomendados para evitar problemas de permissões com a Sandbox do Flatpak
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-    
-        # 2. Inicializa o WebDriver
-        # O Selenium Manager baixará o ChromeDriver compatível automaticamente se você estiver usando o Selenium 4+
-        
-        #service = webdriver.ChromeService()
-        #driver = webdriver.Chrome(service=service)
-        driver = webdriver.Chrome(options=options)
-        
-        #driver = webdriver.Chrome()
-        driver.maximize_window()
-        return driver
-    
+    """
+    Inicia o navegador utilizando o Selenium WebDriver.
 
-# def iniciar_navegador():
-#     """
-#     Inicia o navegador utilizando o Selenium WebDriver.
+    Utiliza:
 
-#     Utiliza:
+        webdriver.Chrome()
+            Cria uma instância do Google Chrome.
 
-#         webdriver.Chrome()
-#             Cria uma instância do Google Chrome.
+        maximize_window()
+            Maximiza a janela do navegador.
 
-#         maximize_window()
-#             Maximiza a janela do navegador.
+    Retorno:
 
-#     Retorno:
-
-#         driver:
-#             Objeto responsável pelo controle
-#             do navegador.
-#     """
-    
-#     driver = webdriver.Chrome()
-#     driver.maximize_window()
-#     return driver
+        driver:
+            Objeto responsável pelo controle
+            do navegador.
+    """
+    options = webdriver.ChromeOptions()
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(options=options)
+    driver.maximize_window()
+    return driver
 
 
 

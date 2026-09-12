@@ -1,12 +1,7 @@
 .env
 env
-#arquivos d teste e log
-*.xlsx
-*.txt
-*.log
-#pastas de cobfig
+__pycache__/
+*.pyc
 .venv/
-.vscode/
-#pastas do de cache do python3, no linux
-*_pycache_
-*.zip
+venv/
+/aula

@@ -10,7 +10,7 @@ def test_basic_options():
     options.add_argument("--no-sandbox")
     driver = webdriver.Chrome(options=options)
 
-    #driver.quit()
+    driver.quit()
 
 
 def test_args():
@@ -21,7 +21,7 @@ def test_args():
     driver = webdriver.Chrome(options=options)
     driver.get('http://selenium.dev')
 
-    #driver.quit()
+    driver.quit()
 
 
 def test_set_browser_location(chrome_bin):
