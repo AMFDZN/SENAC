@@ -2,8 +2,13 @@
 # pip install beautifulsoup4
 
 import requests
-
+import os
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+
+
+load_dotenv()
+URL_SITE = os.getenv("URL_SITE")
 
 
 

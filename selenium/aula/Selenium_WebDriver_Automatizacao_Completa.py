@@ -1017,16 +1017,12 @@ ROBÔ COMPLETO
         )
 
 
-        opcao = input(
-            "Escolha uma opção: "
-        )
+        opcao = input("Escolha uma opção: ")
 
 
         if opcao == "1":
 
-            driver = iniciar_navegador(
-                headless=False
-            )
+            driver = iniciar_navegador(headless=False)
 
 
             try:
