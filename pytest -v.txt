@@ -1,1 +1,0 @@
-& "$env:APPDATA\Python\Python314\Scripts\pytest.exe" -v
