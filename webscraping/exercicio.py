@@ -8,14 +8,20 @@ from bs4 import BeautifulSoup
 import requests
 import os
 
-DIRETORIO_EXERCICIO = Path(__file__).resolve().parent
-PASTA_SAIDA = DIRETORIO_EXERCICIO / "saida"
+
 # ==========================================
 # CONSTANTE DO NO ARQUIVO .env
 # ==========================================
 from dotenv import load_dotenv
 load_dotenv()
 URL_SITE = os.getenv("URL_SITE")
+NOME_PASTA_TESTE = os.getenv("NOME_PASTA_TESTE")
+ARQUIVO_SCRAPE= os.getenv("ARQUIVO_SCRAPE")
+ARQUIVO_RELATORIO= os.getenv("ARQUIVO_RELATORIO")
+
+DIRETORIO_EXERCICIO = Path(__file__).resolve().parent
+PASTA_TESTE = DIRETORIO_EXERCICIO / NOME_PASTA_TESTE
+
 
 
 # Elementos visuais para formatação no console
@@ -34,7 +40,7 @@ LI = "➤"
 def criarPastas():
     """Cria a pasta para o arquivo texto (exercício 21) caso não exista."""
     try:
-        os.makedirs(PASTA_SAIDA, exist_ok=True)
+        os.makedirs(PASTA_TESTE, exist_ok=True)
     except Exception as e:
         print(f"{ERRO} Erro ao criar pastas: {e}")
 
@@ -76,6 +82,12 @@ def obterPagina(url=URL_SITE):
     try:
         resposta = requests.get(url, timeout=10)
         resposta.raise_for_status()
+        """MUITO IMPORTANTE - declarar utf-8 antes de usar "embelezar", e cha,mar o html.parser
+        pois se o servidor não retornar um header com UTF-8 ele retornará o genérico/padrão de fallback
+        ISO-8859-1 ou Latin-1 - que é preparado para os bancos de dados que também foram deixados sem codificação de caracteres."""
+        #SETANDO A REQUISIÇÃO EM UTF-8, para obter uma rsposta em "UTF-8 limpo"
+        resposta.encoding = "utf-8"
+        #
         return BeautifulSoup(resposta.text, "html.parser")
     except requests.exceptions.Timeout:
         print(f"\n{ERRO} O servidor demorou muito para responder.")
@@ -145,8 +157,16 @@ def mostrarHtml():
     try:
         resposta = requests.get(URL_SITE, timeout=10)
         resposta.raise_for_status()
+        #99.9% dos sites de hoje são em UTF-8,
+        # mas vá que haja alguém que alimente o banco de dados
+        # com textos copiadosa do word !
+        # o site de teste está com lang="en"
+        # e não há declaração de charset
+        resposta.encoding = "utf-8"
+        ############################
+        
         print(f"\n{LINHA}\n             HTML DA PÁGINA\n{LINHA}")
-        print(resposta.text[:1000] + "\n... [Conteúdo truncado para exibição] ...")
+        print(resposta.text[:1000] + "\n... [Conteúdo limitado em mil cracteres] ...")
     except requests.exceptions.RequestException as e:
         print(f"{ERRO} {e}")
 
@@ -429,14 +449,14 @@ def resumoColeta():
 # O arquivo deverá ser chamado livros.txt. 
 # Cada livro deverá ocupar uma linha do arquivo. 
 def salvarLivrosTxt():
-    """Exercício 21: Salva títulos e preços no arquivo livros.txt dentro de saida/."""
+    """Exercício 21: Salva títulos e preços no arquivo {ARQUIVO_SCRAPE} dentro de saida/."""
     criarPastas()
     soup = obterPagina()
     if not soup:
         return
 
     livros = soup.select("article.product_pod")
-    caminhoArquivo = PASTA_SAIDA / "livros.txt"
+    caminhoArquivo = PASTA_TESTE / ARQUIVO_SCRAPE
 
     with open(caminhoArquivo, "w", encoding="utf-8") as arquivo:
         for livro in livros:
@@ -444,14 +464,16 @@ def salvarLivrosTxt():
             preco = livro.select_one(".price_color").get_text(strip=True)
             arquivo.write(f"{titulo} | {preco}\n")
 
-    print(f"\n{OK} Dados salvos com sucesso em: {caminhoArquivo}")
+    print(f"\n{OK} Dados salvos com sucesso em: {ARQUIVO_SCRAPE}")
+    with open(caminhoArquivo, "r", encoding="utf-8") as arquivo:
+        print(f"{arquivo.read()}")
 
 # Exercício 22 
 # Crie uma função que gere um relatório de livros em um arquivo de texto. 
 # O relatório deverá conter título do relatório, data da coleta, quantidade de livros, 
 # títulos dos livros, preços, menor preço, maior preço e preço médio. 
 def gerarRelatorio():
-    """Exercício 22: Gera relatório detalhado em arquivo de texto na pasta saida/."""
+    """Exercício 22: Gera relatório detalhado em arquivo de texto na pasta teste/."""
     criarPastas()
     soup = obterPagina()
     if not soup: return
@@ -471,7 +493,7 @@ def gerarRelatorio():
         preco_limpo = ''.join(c for c in texto_preco if c.isdigit() or c == '.')
         precos.append(float(preco_limpo))
 
-    caminhoArquivo = PASTA_SAIDA / 'relatorio_livros.txt'
+    caminhoArquivo = PASTA_TESTE / ARQUIVO_RELATORIO
     dataAtual = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
 
     # Calcula as estatísticas
@@ -482,12 +504,12 @@ def gerarRelatorio():
 
     # Escreve os dados no arquivo de texto
     with open(caminhoArquivo, 'w', encoding='utf-8') as arquivo:
-        arquivo.write('=== RELATÓRIO DE LIVROS ===\n')
-        arquivo.write(f'Data da coleta: {dataAtual}\n')
-        arquivo.write(f'Quantidade de livros: {qtd_livros}\n')
-        arquivo.write(f'Menor preço: £{menor_preco:.2f}\n')
-        arquivo.write(f'Maior preço: £{maior_preco:.2f}\n')
-        arquivo.write(f'Preço médio: £{media_preco:.2f}\n')
+        arquivo.write(f'{OK} RELATÓRIO DE LIVROS {OK}\n')
+        arquivo.write(f'{LI} Data da coleta: {dataAtual}\n')
+        arquivo.write(f'{LI} Quantidade de livros: {qtd_livros}\n')
+        arquivo.write(f'{LI} Menor preço: £{menor_preco:.2f}\n')
+        arquivo.write(f'{LI} Maior preço: £{maior_preco:.2f}\n')
+        arquivo.write(f'{LI} Preço médio: £{media_preco:.2f}\n')
         arquivo.write('-' * 40 + '\n\n')
 
         for numero, livro in enumerate(livros, start=1):
@@ -499,7 +521,6 @@ def gerarRelatorio():
 
     print(f'\n{OK} Relatório criado com sucesso em: {caminhoArquivo}')
 
-    #print(f"\n{OK} Relatório criado com sucesso em: {caminhoArquivo}")
 
 # Exercício 23 
 # Crie uma função que apresente os links dos livros encontrados. 
@@ -532,7 +553,7 @@ def navegarPaginas():
     if not soup:
         return
 
-    print(f"\n{OK} Página atual carregada. Analisando link de paginação...")
+    print(f"\n{OK} Página atual carregada.\nAnalisando link de paginação...")
     botaoProximo = soup.select_one("li.next > a")
     
     if botaoProximo:
